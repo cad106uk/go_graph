@@ -1,4 +1,7 @@
-This is my little teach myself go project. I doubt it will have any use for anyone else.
+go_graph
+========
+
+My little teach myself go project. A simple little graph DB engine written in go. I doubt it will have any use for anyone else.
 
 I am writing a simple little graph DB engine. It will have nodes and edges, the nodes and edges will have types. So node will connect to edges and edges will connect to node. An edge will have a start and an end and will connect to 2 nodes (or loop back on to the node it started from). The edge will have a list of valid node types it can start from and a different list of node types it can end at.
 
