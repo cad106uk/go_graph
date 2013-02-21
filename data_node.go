@@ -17,7 +17,7 @@ type nodeType struct {
 	description string
 }
 
-var allNodeTypes map[string]nodeType
+var allNodeTypes = make(map[string]nodeType)
 
 type dataNode struct {
 	dataType nodeType
