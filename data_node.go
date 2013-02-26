@@ -3,13 +3,13 @@ package go_graph
 import (
 	"sync"
 	"crypto/sha1"
+	"crypto/rand"
+	"io"
 )
 
 type data struct {
 	data []byte
 }
-
-type document interface{}
 
 type NodeError struct {
 	msg string
@@ -48,11 +48,19 @@ func CreateDataNode(t nodeType, d []byte) (dataNode, error) {
 	newNode.dataType = t
 	newNode.setValue.Do(func() {
 		newNode.data = newData
+
+		rand_store := genRandNum()
 		hasher := sha1.New()
-		hasher.Write([]byte(t.name))
-		hasher.Write(d)
+		hasher.Write(*rand_store)
 		newNode.id = string(hasher.Sum(nil))
 	})
 
 	return newNode, nil
+}
+
+func genRandNum() *[]byte {
+	count := 1024
+	rand_store := make([]byte, count)
+	io.ReadFull(rand.Reader, rand_store)
+	return &rand_store
 }
