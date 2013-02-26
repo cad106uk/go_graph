@@ -1,8 +1,8 @@
 package go_graph
 
 import (
-	"testing"
 	"bytes"
+	"testing"
 )
 
 var nt, _ = GetOrCreateNodeType("Your", "Moma")
@@ -40,6 +40,4 @@ func TestCreateDataNode(t *testing.T) {
 		}
 	}
 
-	
-} 
-
+}

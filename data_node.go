@@ -1,10 +1,10 @@
 package go_graph
 
 import (
-	"sync"
-	"crypto/sha1"
 	"crypto/rand"
+	"crypto/sha1"
 	"io"
+	"sync"
 )
 
 type data struct {
@@ -21,9 +21,9 @@ func (ne *NodeError) Error() string {
 
 type dataNode struct {
 	dataType nodeType
-	data           // The data stored at this node
+	data               // The data stored at this node
 	setValue sync.Once // The value can only be set once
-	id string
+	id       string
 }
 
 func (dh *dataNode) GetType() nodeType {
