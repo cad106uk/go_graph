@@ -21,9 +21,8 @@ func (g *GraphNode) SetValue(input document) error {
 	return nil
 }
 
-func (g *GraphNode) MakeNode(nodeType string, input document) error {
-	var dn dataNode
-	err := dn.Init(nodeType, input)
+func (g *GraphNode) MakeNode(nt nodeType, input document) error {
+	dn, err := CreateDataNode(nt, input)
 	if err != nil {
 		return err
 	}

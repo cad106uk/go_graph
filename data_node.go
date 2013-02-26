@@ -1,6 +1,13 @@
 package go_graph
 
-import "sync"
+import (
+	"sync"
+	"crypto/sha1"
+)
+
+type data struct {
+	data []byte
+}
 
 type document interface{}
 
@@ -16,17 +23,37 @@ type dataNode struct {
 	dataType nodeType
 	document           // The data stored at this node
 	setValue sync.Once // The value can only be set once
+	id string
 }
 
-func (dn *dataNode) Init(dt string, doc document) error {
-	val, err := GetNodeType(dt)
-	if err != nil {
-		return err
-	}
+func (dh *dataNode) GetType() nodeType {
+	return dh.dataType
+}
 
-	dn.dataType = val
-	dn.setValue.Do(func() {
-		dn.document = doc
+func (dh *dataNode) GetValue() document {
+	return dh.document
+}
+
+func (dh *dataNode) GetId() string {
+	return dh.id
+}
+
+func CreateDataNode(t nodeType, d document) (dataNode, error) {
+	newNode := dataNode{}
+	empty := nodeType{}
+	if t == empty {
+		return dataNode{}, error(&NodeError{"The nodeType is blank. Must have a valid node type"})
+	}
+	newNode.dataType = t
+	newNode.setValue.Do(func() {
+		da := data{d}
+		newNode.document = da
 	})
-	return nil
+
+	hasher := sha1.New()
+	hasher.Write([]byte(t.name))
+	hasher.Write([]byte(d.([]byte)))
+	newNode.id = string(hasher.Sum(nil))
+
+	return newNode, nil
 }
