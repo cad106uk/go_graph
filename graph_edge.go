@@ -45,7 +45,7 @@ func (ge *GraphEdge) Init(edTy string, from, to dataNode) error {
 		return error(&NodeError{"The from dataNode is invalid for this edge type"})
 	}
 	tmp := dataNode{}
-	if to == tmp {
+	if to.id == tmp.id {
 		to = from
 	}
 

@@ -2,7 +2,16 @@ package go_graph
 
 import "testing"
 
+func setUp() {
+	allNodeTypes = make(map[string]nodeType)
+}
+
+func tearDown() {
+	allNodeTypes = make(map[string]nodeType)
+}
+
 func TestCreateNewNodeType(t *testing.T) {
+	setUp()
 	ret := CreateNewNodeType("Your", "Moma")
 	if ret != nil {
 		t.Error("Expected no error got", ret)
@@ -44,9 +53,11 @@ func TestCreateNewNodeType(t *testing.T) {
 		t.Error("Expected Moma Your and got", val.name,
 			val.description)
 	}
+	tearDown()
 }
 
 func TestGetNodeType(t *testing.T) {
+	setUp()
 	CreateNewNodeType("Your", "Moma")
 	val, err := GetNodeType("Your")
 	if err != nil {
@@ -76,9 +87,11 @@ func TestGetNodeType(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to get second valid node with error", err)
 	}
+	tearDown()
 }
 
 func TestGetOrCreateNodeType(t *testing.T) {
+	setUp()
 	val, err := GetOrCreateNodeType("Your", "Moma")
 	if err != nil {
 		t.Error("Failed to create with error", err)
@@ -103,4 +116,5 @@ func TestGetOrCreateNodeType(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to create with error", err)
 	}
+	tearDown()
 }

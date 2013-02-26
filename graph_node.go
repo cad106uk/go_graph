@@ -8,20 +8,20 @@ type GraphNode struct {
 }
 
 // returns the value that the GraphNode has
-func (g *GraphNode) Value() (document, error) {
-	val := g.value.document
+func (g *GraphNode) Value() (data, error) {
+	val := g.value.data
 	return val, nil
 }
 
 // Set the value this GraphNode stores. Can be called many times but onyl sets a value the first time it has been called.
-func (g *GraphNode) SetValue(input document) error {
+func (g *GraphNode) SetValue(input data) error {
 	g.value.setValue.Do(func() {
-		g.value.document = input
+		g.value.data = input
 	})
 	return nil
 }
 
-func (g *GraphNode) MakeNode(nt nodeType, input document) error {
+func (g *GraphNode) MakeNode(nt nodeType, input []byte) error {
 	dn, err := CreateDataNode(nt, input)
 	if err != nil {
 		return err

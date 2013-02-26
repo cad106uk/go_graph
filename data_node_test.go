@@ -5,7 +5,7 @@ import "testing"
 var nt, _ = GetOrCreateNodeType("Your", "Moma")
 
 func TestCreateDataNode(t *testing.T) {
-	node, err := CreateDataNode(nt, "Your Moma")
+	node, err := CreateDataNode(nt, []byte("Your Moma"))
 	if err != nil {
 		t.Error("Failed to create a data node ", err)
 	}
