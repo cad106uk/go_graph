@@ -1,20 +1,40 @@
 go_graph
 ========
 
-My little teach myself go project. A simple little graph DB engine written in go. I doubt it will have any use for anyone else.
+My little teach myself go project. A simple little graph DB engine written in go.
 
-I am writing a simple little graph DB engine. It will have nodes and edges, the nodes and edges will have types. So node will connect to edges and edges will connect to node. An edge will have a start and an end and will connect to 2 nodes (or loop back on to the node it started from). The edge will have a list of valid node types it can start from and a different list of node types it can end at.
+The thing I want to explore with this project is the goroutines. My plan for this is write a basic graph DB engine that will be able to build the graph structure when given new data. The current plan is to only have graph edge of predifened types (as in you have to create the edge type before you can use it). Then the data nodes will have lists of valid edges that can connect to the node and another list of edges that can connect from the node. The final step in this process is to creat building logic, so I can tell the DB what connection a node of a given type should have.
 
-So only preset valid connections are possible.
+EG:
 
-Traverse the graph the dataNodes are wrapped by a GraphNode. A GraphNode contains 1 dataNode and 1 list of all the connections this node starts at and 1 list of all the connections this node ends at. Each edge can at most have 2 different dataNodes attached to it. The dataNodes are pasive, they know nothing about edges other node or anything other than there own data. The GraphNode wraps the dataNode can keeps a list of everything that connects to and from the data.
+node Person
+a Person has from/to edge type sibling
+a Person has from edge type child
+a Person has To edge type Parent
+a Person has to edge type Aunty
+a person has From edage type Niece
+
+So I have 3 sisters, when I have a daughter. I only have to tell the DB that I have had a child and the DB engine (in the background using goroutines) will use the give rules for a person to create all the Sibling, Aunt/Niece, Cousin relations automatically
+
+To start with this will be an in memory process only.
+
+Have:
+    Creted data store
+    edge types
 
 Next step(s):
      UNIT TESTS!!!!!!
-     Use the GraphNodes to write a means of traversing the graph
-     The functions/methods to create nodes and edges are all currently blocking, must find a safe and useful way of wrapping them in goroutines.
+     Put data and edge nodes together
+     use graph node to keep track of all the edges a node has
+     traverse the graph.
+     build logic to automatically create edges for a node (start with static example)
+     make a system to create this logic as needed
+     Write a standard set of graph searches.
+     Make an API so other processes can use this graph engine
+     Rewrite everything again from scratch using what I have larnt along the way
 
 
-This DB can only run on 1 machine (add culster? how?)
 
-Everything is held in memory no permiant store (yet?)
+This DB can only run on 1 machine (add culstering? how?)
+
+Everything is held in memory no permiant store (What file format works for a graph?)
