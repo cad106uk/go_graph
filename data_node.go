@@ -7,6 +7,27 @@ import (
 	"sync"
 )
 
+func genRandNum() *[]byte {
+	count := 1024
+	rand_store := make([]byte, count)
+	io.ReadFull(rand.Reader, rand_store)
+	return &rand_store
+}
+
+var id_buffer chan []byte = make(chan []byte, 10)
+var gen_ids_once sync.Once
+
+func genIds() {
+	go gen_ids_once.Do(func() {
+		for {
+			rand_store := genRandNum()
+			hasher := sha1.New()
+			hasher.Write(*rand_store)
+			id_buffer <- hasher.Sum(nil)[0:20]
+		}
+	})
+}
+
 type data struct {
 	data []byte
 }
@@ -39,6 +60,7 @@ func (dh *dataNode) GetId() string {
 }
 
 func CreateDataNode(t nodeType, d []byte) (dataNode, error) {
+	genIds()
 	newData := data{d}
 	newNode := dataNode{}
 	empty := nodeType{}
@@ -48,19 +70,8 @@ func CreateDataNode(t nodeType, d []byte) (dataNode, error) {
 	newNode.dataType = t
 	newNode.setValue.Do(func() {
 		newNode.data = newData
-
-		rand_store := genRandNum()
-		hasher := sha1.New()
-		hasher.Write(*rand_store)
-		newNode.id = string(hasher.Sum(nil))
+		newNode.id  = string(<- id_buffer)
 	})
 
 	return newNode, nil
-}
-
-func genRandNum() *[]byte {
-	count := 1024
-	rand_store := make([]byte, count)
-	io.ReadFull(rand.Reader, rand_store)
-	return &rand_store
 }
