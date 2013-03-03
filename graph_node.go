@@ -1,4 +1,7 @@
 // This package provides the basic structure for building a graph
+// the graph node is ment encapsulate a data node and all the
+// graph edges the come to and from this node
+
 package go_graph
 
 type GraphNode struct {
