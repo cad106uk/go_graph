@@ -7,7 +7,7 @@ type GraphEdge struct {
 }
 
 // Create new edge. An edge is allowed to link to the same node
-func New(edTy string, from, to dataNode) (GraphEdge, error) {
+func NewGraphEdge(edTy string, from, to dataNode) (GraphEdge, error) {
 	ge := GraphEdge{}
 	et, err := GetEdgeType(edTy)
 	if err != nil {
