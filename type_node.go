@@ -17,15 +17,15 @@ func CreateNewNodeType(name, desc string) error {
 	return nil
 }
 
-func GetNodeType(name string) (nodeType, error) {
+func GetNodeType(name string) (*nodeType, error) {
 	val, present := allNodeTypes[name]
 	if !present {
-		return nodeType{}, error(&NodeError{"No NodeType with this name exists"})
+		return &nodeType{}, error(&NodeError{"No NodeType with this name exists"})
 	}
-	return val, nil
+	return &val, nil
 }
 
-func GetOrCreateNodeType(name, desc string) (nodeType, error) {
+func GetOrCreateNodeType(name, desc string) (*nodeType, error) {
 	val, err := GetNodeType(name)
 	if err == nil {
 		return val, nil
@@ -36,5 +36,5 @@ func GetOrCreateNodeType(name, desc string) (nodeType, error) {
 		return GetNodeType(name)
 	}
 
-	return nodeType{}, err
+	return &nodeType{}, err
 }

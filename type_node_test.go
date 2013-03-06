@@ -12,9 +12,9 @@ func tearDown() {
 
 func TestCreateNewNodeType(t *testing.T) {
 	setUp()
-	ret := CreateNewNodeType("Your", "Moma")
-	if ret != nil {
-		t.Error("Expected no error got", ret)
+	err := CreateNewNodeType("Your", "Moma")
+	if err != nil {
+		t.Error("Expected no error got", err)
 	}
 
 	val, present := allNodeTypes["Your"]
@@ -27,21 +27,21 @@ func TestCreateNewNodeType(t *testing.T) {
 			val.description)
 	}
 
-	ret = CreateNewNodeType("Your", "Moma")
-	if ret == nil {
+	err = CreateNewNodeType("Your", "Moma")
+	if err == nil {
 		t.Error("FAILED duplicated one node type")
 	}
 
 	expected := "A NodeType with this name has already been created"
-	actual := ret.Error()
+	actual := err.Error()
 	if actual != expected {
 		t.Error("Wrong error message expected but got",
 			expected, actual)
 	}
 
-	ret = CreateNewNodeType("Moma", "Your")
-	if ret != nil {
-		t.Error("Expected no error for second node got", ret)
+	err = CreateNewNodeType("Moma", "Your")
+	if err != nil {
+		t.Error("Expected no error for second node got", err)
 	}
 
 	val, present = allNodeTypes["Moma"]
@@ -71,7 +71,7 @@ func TestGetNodeType(t *testing.T) {
 
 	val, err = GetNodeType("FAIL")
 	tmp := nodeType{}
-	if val != tmp {
+	if *val != tmp {
 		t.Error("Didn't return empty nodeType")
 	}
 
@@ -92,7 +92,7 @@ func TestGetNodeType(t *testing.T) {
 
 func TestGetOrCreateNodeType(t *testing.T) {
 	setUp()
-	val, err := GetOrCreateNodeType("Your", "Moma")
+	_, err := GetOrCreateNodeType("Your", "Moma")
 	if err != nil {
 		t.Error("Failed to create with error", err)
 	}
@@ -107,12 +107,12 @@ func TestGetOrCreateNodeType(t *testing.T) {
 			val.description)
 	}
 
-	val, err = GetOrCreateNodeType("Your", "Moma")
+	_, err = GetOrCreateNodeType("Your", "Moma")
 	if err != nil {
 		t.Error("Failed to get with error", err)
 	}
 
-	val, err = GetOrCreateNodeType("Moma", "Your")
+	_, err = GetOrCreateNodeType("Moma", "Your")
 	if err != nil {
 		t.Error("Failed to create with error", err)
 	}

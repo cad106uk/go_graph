@@ -8,9 +8,9 @@ func TestNew(t *testing.T) {
 
 	et, _ := CreateEdgeType("Your Moma", []string{"ValidFrom"}, []string{"ValidTo"})
 	fromEdge, _ := GetOrCreateNodeType("ValidFrom", "Moma")
-	fromData, _ := CreateDataNode(fromEdge, []byte("Your Moma"))
+	fromData, _ := CreateDataNode(*fromEdge, []byte("Your Moma"))
 	toEdge, _ := GetOrCreateNodeType("ValidTo", "Moma")
-	toData, _ := CreateDataNode(toEdge, []byte("Your Moma"))
+	toData, _ := CreateDataNode(*toEdge, []byte("Your Moma"))
 	failNode := dataNode{}
 
 	ge, err := NewGraphEdge("FAIL", fromData, toData)
