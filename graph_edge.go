@@ -15,7 +15,7 @@ func NewGraphEdge(edTy string, from, to *dataNode) (GraphEdge, error) {
 	}
 
 	if from.id == "" {
-		return ge, error(&NodeError{"The from dataNode is invalid for this edge type"})
+		return ge, error(&NodeError{"The from dataNode has not been initialised"})
 	}
 	match := et.ValidFromNode(*from)
 	if !match {
@@ -27,7 +27,7 @@ func NewGraphEdge(edTy string, from, to *dataNode) (GraphEdge, error) {
 	}
 
 	if to.id == "" {
-		return ge, error(&NodeError{"The from dataNode is invalid for this edge type"})
+		return ge, error(&NodeError{"The to dataNode hsa not been initialised"})
 	}
 	match = et.ValidToNode(*to)
 	if !match {

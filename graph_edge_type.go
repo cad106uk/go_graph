@@ -32,10 +32,12 @@ func (et *edgeType) GetValidToNode() []string {
 	return et.validToNodes
 }
 
+// Can this edge connect to spcific node?
 func (et *edgeType) ValidToNode(to dataNode) bool {
 	return matchEdgeType(to.dataType.name, et.validToNodes)
 }
 
+// Can this edge connect from a specific node?
 func (et *edgeType) ValidFromNode(from dataNode) bool {
 	return matchEdgeType(from.dataType.name, et.validFromNodes)
 }

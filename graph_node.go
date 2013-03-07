@@ -11,9 +11,9 @@ type GraphNode struct {
 }
 
 // returns the value that the GraphNode has
-func (g *GraphNode) Value() (data, error) {
+func (g *GraphNode) Value() (*data, error) {
 	val := g.value.data
-	return val, nil
+	return &val, nil
 }
 
 // Set the value this GraphNode stores. Can be called many times but onyl sets a value the first time it has been called.
