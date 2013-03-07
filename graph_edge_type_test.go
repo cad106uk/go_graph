@@ -1,6 +1,6 @@
 package go_graph
 
-import	"testing"
+import "testing"
 
 func TestMatchEdgeType(t *testing.T) {
 	find, _ := GetOrCreateNodeType("find", "Your")
@@ -21,7 +21,7 @@ func TestMatchEdgeType(t *testing.T) {
 func TestEdgeType(t *testing.T) {
 	failFromArgs := []*nodeType{&nodeType{"FailFrom1", "Your Moma"}, &nodeType{"FailFrom2", "Your Moma"}}
 	failToArgs := []*nodeType{&nodeType{"FailTo1", "Your Moma"}, &nodeType{"FailTo2", "Your Moma"}}
-	et := edgeType{"Your Moma",failFromArgs, failToArgs}
+	et := edgeType{"Your Moma", failFromArgs, failToArgs}
 
 	nt, _ := GetOrCreateNodeType("Your", "Moma")
 	dn, _ := CreateDataNode(nt, []byte("Your Moma"))
