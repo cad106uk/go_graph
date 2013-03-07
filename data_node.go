@@ -17,14 +17,18 @@ func genRandNum() *[]byte {
 var id_buffer chan []byte = make(chan []byte, 10)
 var gen_ids_once sync.Once
 
+func bufferNewIds() {
+	for {
+		rand_store := genRandNum()
+		hasher := sha1.New()
+		hasher.Write(*rand_store)
+		id_buffer <- hasher.Sum(nil)[0:20]
+	}
+}
+
 func genIds() {
-	go gen_ids_once.Do(func() {
-		for {
-			rand_store := genRandNum()
-			hasher := sha1.New()
-			hasher.Write(*rand_store)
-			id_buffer <- hasher.Sum(nil)[0:20]
-		}
+	gen_ids_once.Do(func() {
+		go bufferNewIds()
 	})
 }
 
