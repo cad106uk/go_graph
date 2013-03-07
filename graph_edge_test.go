@@ -6,12 +6,12 @@ func TestNew(t *testing.T) {
 	// Clean the data
 	all_edge_types = make(map[string]edgeType)
 
-	et, _ := CreateEdgeType("Your Moma", []string{"ValidFrom"}, []string{"ValidTo"})
 	fromEdge, _ := GetOrCreateNodeType("ValidFrom", "Moma")
 	fromData, _ := CreateDataNode(fromEdge, []byte("Your Moma"))
 	toEdge, _ := GetOrCreateNodeType("ValidTo", "Moma")
 	toData, _ := CreateDataNode(toEdge, []byte("Your Moma"))
 	failNode := dataNode{}
+	et, _ := CreateEdgeType("Your Moma", []*nodeType{fromEdge}, []*nodeType{toEdge})
 
 	ge, err := NewGraphEdge("FAIL", &fromData, &toData)
 	if err == nil {

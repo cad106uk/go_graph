@@ -1,6 +1,6 @@
 package go_graph
 
-func matchEdgeType(name string, validSlice []string) bool {
+func matchEdgeType(name *nodeType, validSlice []*nodeType) bool {
 	match := false
 	for _, val := range validSlice {
 		if name == val {
@@ -13,8 +13,8 @@ func matchEdgeType(name string, validSlice []string) bool {
 
 type edgeType struct {
 	edgeTypeName   string
-	validFromNodes []string // A list of node types
-	validToNodes   []string // A list of node types
+	validFromNodes []*nodeType // A list of node types
+	validToNodes   []*nodeType // A list of node types
 }
 
 // The name of this edgeType
@@ -23,23 +23,23 @@ func (et *edgeType) GetName() string {
 }
 
 // The list of nodes this edge can connect from
-func (et *edgeType) GetValidFromNodes() []string {
+func (et *edgeType) GetValidFromNodes() []*nodeType {
 	return et.validFromNodes
 }
 
 // The list of  nodes this edge can connect to
-func (et *edgeType) GetValidToNode() []string {
+func (et *edgeType) GetValidToNode() []*nodeType {
 	return et.validToNodes
 }
 
 // Can this edge connect to spcific node?
 func (et *edgeType) ValidToNode(to dataNode) bool {
-	return matchEdgeType(to.dataType.name, et.validToNodes)
+	return matchEdgeType(to.dataType, et.validToNodes)
 }
 
 // Can this edge connect from a specific node?
 func (et *edgeType) ValidFromNode(from dataNode) bool {
-	return matchEdgeType(from.dataType.name, et.validFromNodes)
+	return matchEdgeType(from.dataType, et.validFromNodes)
 }
 
 var all_edge_types map[string]edgeType = make(map[string]edgeType)
@@ -52,7 +52,7 @@ func GetEdgeType(name string) (edgeType, error) {
 	return val, nil
 }
 
-func CreateEdgeType(name string, validFrom []string, validTo []string) (edgeType, error) {
+func CreateEdgeType(name string, validFrom, validTo []*nodeType) (edgeType, error) {
 	_, present := all_edge_types[name]
 	if present {
 		return edgeType{}, error(&NodeError{"An EdgeType with this name has already been created"})
