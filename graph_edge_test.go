@@ -8,16 +8,16 @@ func TestNew(t *testing.T) {
 
 	et, _ := CreateEdgeType("Your Moma", []string{"ValidFrom"}, []string{"ValidTo"})
 	fromEdge, _ := GetOrCreateNodeType("ValidFrom", "Moma")
-	fromData, _ := CreateDataNode(*fromEdge, []byte("Your Moma"))
+	fromData, _ := CreateDataNode(fromEdge, []byte("Your Moma"))
 	toEdge, _ := GetOrCreateNodeType("ValidTo", "Moma")
-	toData, _ := CreateDataNode(*toEdge, []byte("Your Moma"))
+	toData, _ := CreateDataNode(toEdge, []byte("Your Moma"))
 	failNode := dataNode{}
 
-	ge, err := NewGraphEdge("FAIL", fromData, toData)
+	ge, err := NewGraphEdge("FAIL", &fromData, &toData)
 	if err == nil {
 		t.Error("This edge was not made. This should fail")
 	}
-	ge, err = NewGraphEdge("Your Moma", fromData, toData)
+	ge, err = NewGraphEdge("Your Moma", &fromData, &toData)
 	if err != nil {
 		t.Error(err) // This should fail
 	}
@@ -32,14 +32,14 @@ func TestNew(t *testing.T) {
 		t.Error("The To data should match")
 	}
 
-	ge, err = NewGraphEdge("Your Moma", failNode, toData)
+	ge, err = NewGraphEdge("Your Moma", &failNode, &toData)
 	if err == nil {
 		t.Error("Bad from node should have stopped this")
 	}
 
-	ge, err = NewGraphEdge("Your Moma", fromData, failNode)
+	ge, err = NewGraphEdge("Your Moma", &fromData, &failNode)
 	if err == nil {
-		t.Error("Bad from node should have stopped this")
+		t.Error("Bad to node should have stopped this")
 	}
 
 	// Clean the data

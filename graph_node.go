@@ -24,7 +24,7 @@ func (g *GraphNode) SetValue(input data) error {
 	return nil
 }
 
-func (g *GraphNode) MakeNode(nt nodeType, input []byte) error {
+func (g *GraphNode) MakeNode(nt *nodeType, input []byte) error {
 	dn, err := CreateDataNode(nt, input)
 	if err != nil {
 		return err

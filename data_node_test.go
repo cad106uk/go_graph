@@ -8,11 +8,11 @@ import (
 var nt, _ = GetOrCreateNodeType("Your", "Moma")
 
 func TestCreateDataNode(t *testing.T) {
-	node, err := CreateDataNode(*nt, []byte("Your Moma"))
+	node, err := CreateDataNode(nt, []byte("Your Moma"))
 	if err != nil {
 		t.Error("Failed to create a data node ", err)
 	}
-	if node.dataType != *nt {
+	if node.dataType != nt {
 		t.Error("The node was not created with the correct type")
 	}
 
@@ -34,7 +34,7 @@ func TestCreateDataNode(t *testing.T) {
 	// Yes I know this does not test randomness properly, but it
 	// should catch me at my most stupid
 	for i := 0; i < 100; i += 1 {
-		temp, _ := CreateDataNode(*nt, []byte("Your Moma"))
+		temp, _ := CreateDataNode(nt, []byte("Your Moma"))
 		if node.id == temp.id {
 			t.Error("MATCHING IDS! ", node.id, temp.id)
 		}

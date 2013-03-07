@@ -17,6 +17,21 @@ type edgeType struct {
 	validToNodes   []string // A list of node types
 }
 
+// The name of this edgeType
+func (et *edgeType) GetName() string {
+	return et.edgeTypeName
+}
+
+// The list of nodes this edge can connect from
+func (et *edgeType) GetValidFromNodes() []string {
+	return et.validFromNodes
+}
+
+// The list of  nodes this edge can connect to
+func (et *edgeType) GetValidToNode() []string {
+	return et.validToNodes
+}
+
 func (et *edgeType) ValidToNode(to dataNode) bool {
 	return matchEdgeType(to.dataType.name, et.validToNodes)
 }
