@@ -38,3 +38,37 @@ func NewGraphEdge(edTy string, from, to *dataNode) (GraphEdge, error) {
 	ge.connectTo = *to
 	return ge, nil
 }
+
+// To handle a set of relation eg. Famly would holed brother, sister etc
+type RelationSet struct {
+	edgeTypes []*edgeType
+	name      string
+}
+
+func nodeInList(list []*nodeType, ele *nodeType) bool {
+	for _, val := range list {
+		if val == ele {
+			return true
+		}
+	}
+	return false
+}
+
+func handleRelSetValid(validList, exploreList []*nodeType) (bool, *nodeType) {
+	for _, nt := range validList {
+		if nodeInList(exploreList, nt) {
+			return true, nt
+		}
+	}
+	return false, &nodeType{}
+}
+
+func (rs *RelationSet) ValidFromNode(et *edgeType) (*nodeType, error) {
+	for _, edge := range rs.edgeTypes {
+		success, output := handleRelSetValid(edge.validFromNodes, et.validFromNodes)
+		if success {
+			return output, nil
+		}
+	}
+	return &nodeType{}, error(&NodeError{"This edge type is not valid for this RelationSet"})
+}

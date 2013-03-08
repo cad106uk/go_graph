@@ -33,9 +33,9 @@ func (g *GraphNode) MakeNode(nt *nodeType, input []byte) error {
 	return nil
 }
 
-// // Given a GraphNode this graph node will add the given GraphNode to its own connectsTo slice and will also add
-// // itself to the given GraphNodes connectedFrom slice.
-// func (g *GraphNode) Connect(node GraphNode) error {
+// // A.ConnectTo(B) Means A->From-GraphEdge-To->B
+// // If the types allow.
+// func (g *GraphNode) ConnectTo(node GraphNode) error {
 // 	g.connectsTo = append(g.connectsTo, node.dataNode)
 // 	node.connectedFrom = append(node.connectedFrom, g.dataNode)
 // 	return nil
