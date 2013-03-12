@@ -72,3 +72,13 @@ func (rs *RelationSet) ValidFromNode(et *edgeType) (*nodeType, error) {
 	}
 	return &nodeType{}, error(&NodeError{"This edge type is not valid for this RelationSet"})
 }
+
+func (rs *RelationSet) ValidToNode(et *edgeType) (*nodeType, error) {
+	for _, edge := range rs.edgeTypes {
+		success, output := handleRelSetValid(edge.validToNodes, et.validToNodes)
+		if success {
+			return output, nil
+		}
+	}
+	return &nodeType{}, error(&NodeError{"This edge type is not valid for this RelationSet"})
+}

@@ -1,36 +1,95 @@
-// This package provides the basic structure for building a graph
-// the graph node is ment encapsulate a data node and all the
-// graph edges the come to and from this node
+/*
+ This package provides the basic structure for building a graph
+ the graph node is ment encapsulate a data node and all the
+ graph edges the come to and from this node
+
+The current plan is that that date nodes, types and graph edges are passive.
+It is the GraphNodes that 'know' about the graph. They link to 1 and only 1
+data node. Thay contain all the edges that link to this noe and all the
+edges that link from this node. The graph node also contains the logic to
+say whether a connection can be made. (So a valid connection can only be
+created after 2 GraphNodes have agreed the edge can be made).
+*/
 
 package go_graph
 
+func appendGraphEdge(edge []GraphEdge, val GraphEdge) ([]GraphEdge, error) {
+	edge_len := len(edge)
+	new_edge := make([]GraphEdge, edge_len+1)
+	for i := 0; i < edge_len; i++ {
+		new_edge[i] = edge[i]
+	}
+	new_edge[edge_len+1] = val
+	return new_edge, nil
+}
+
 type GraphNode struct {
-	value               dataNode
-	baseConnections     []GraphEdge // The GraphEdges that use this node as a starting point
-	terminalConnections []GraphEdge // The GraphEdges the use this node as an end point
+	value       dataNode
+	connectFrom []GraphEdge // The GraphEdges that use this node as a starting point
+	connectTo   []GraphEdge // The GraphEdges the use this node as an end point
 }
 
 // returns the value that the GraphNode has
-func (g *GraphNode) Value() (*data, error) {
-	val := g.value.data
+func (gn *GraphNode) Value() (*data, error) {
+	val := gn.value.data
 	return &val, nil
 }
 
 // Set the value this GraphNode stores. Can be called many times but onyl sets a value the first time it has been called.
-func (g *GraphNode) SetValue(input data) error {
-	g.value.setValue.Do(func() {
-		g.value.data = input
+func (gn *GraphNode) SetValue(input data) error {
+	gn.value.setValue.Do(func() {
+		gn.value.data = input
 	})
 	return nil
 }
 
-func (g *GraphNode) MakeNode(nt *nodeType, input []byte) error {
+func (gn *GraphNode) Init(nt *nodeType, input []byte, from, to GraphEdge) error {
 	dn, err := CreateDataNode(nt, input)
 	if err != nil {
 		return err
 	}
-	g.value = dn
+	conTo, err := appendGraphEdge(gn.connectTo, to)
+	if err != nil {
+		return err
+	}
+	conFrom, err := appendGraphEdge(gn.connectFrom, from)
+	if err != nil {
+	}
+
+	gn.value = dn
+	gn.connectTo = conTo
+	gn.connectFrom = conFrom
 	return nil
+}
+
+func (gn *GraphNode) AddFromEdge(from GraphEdge) error {
+	new_edge, err := appendGraphEdge(gn.connectFrom, from)
+	if err != nil {
+		return err
+	}
+	gn.connectFrom = new_edge
+	return nil
+}
+
+func (gn *GraphNode) AddToEdge(to GraphEdge) error {
+	new_edge, err := appendGraphEdge(gn.connectTo, to)
+	if err != nil {
+		return err
+	}
+	gn.connectTo = new_edge
+	return nil
+}
+
+func New(nt *nodeType, input []byte, from, to GraphEdge) (GraphNode, error) {
+	gn := GraphNode{}
+	dn, err := CreateDataNode(nt, input)
+	if err != nil {
+		return gn, err
+	}
+	gn.value = dn
+	gn.AddToEdge(to)
+	gn.AddFromEdge(from)
+	return gn, nil
 }
 
 // // A.ConnectTo(B) Means A->From-GraphEdge-To->B
