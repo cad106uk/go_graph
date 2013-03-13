@@ -1,5 +1,7 @@
 package go_graph
 
+import "fmt"
+
 func matchEdgeType(name *nodeType, validSlice []*nodeType) bool {
 	match := false
 	for _, val := range validSlice {
@@ -33,23 +35,31 @@ func (et *edgeType) GetValidToNode() []*nodeType {
 }
 
 // Can this edge connect to spcific node?
-func (et *edgeType) ValidToNode(to dataNode) bool {
-	return matchEdgeType(to.dataType, et.validToNodes)
+func (et *edgeType) ValidToNode(to GraphNode) bool {
+	fmt.Println("------------------------------")
+	fmt.Println(to)
+	fmt.Println(to.value)
+	fmt.Println(to.value.dataType)
+	fmt.Println("------------------------------")
+	fmt.Println(et)
+	fmt.Println(et.validToNodes)
+	fmt.Println("------------------------------")
+	return matchEdgeType(to.value.dataType, et.validToNodes)
 }
 
 // Can this edge connect from a specific node?
-func (et *edgeType) ValidFromNode(from dataNode) bool {
-	return matchEdgeType(from.dataType, et.validFromNodes)
+func (et *edgeType) ValidFromNode(from GraphNode) bool {
+	return matchEdgeType(from.value.dataType, et.validFromNodes)
 }
 
 var all_edge_types map[string]edgeType = make(map[string]edgeType)
 
-func GetEdgeType(name string) (edgeType, error) {
+func GetEdgeType(name string) (*edgeType, error) {
 	val, present := all_edge_types[name]
 	if !present {
-		return edgeType{}, error(&NodeError{"This edgeType does not exist"})
+		return &edgeType{}, error(&NodeError{"This edgeType does not exist"})
 	}
-	return val, nil
+	return &val, nil
 }
 
 func CreateEdgeType(name string, validFrom, validTo []*nodeType) (edgeType, error) {

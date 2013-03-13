@@ -25,20 +25,22 @@ func TestEdgeType(t *testing.T) {
 
 	nt, _ := GetOrCreateNodeType("Your", "Moma")
 	dn, _ := CreateDataNode(nt, []byte("Your Moma"))
-	if et.ValidToNode(dn) {
+	gn := GraphNode{}
+	gn.SetValue(dn.data)
+	if et.ValidToNode(gn) {
 		t.Error("Failed this data and edge node don't match")
 	}
-	if et.ValidFromNode(dn) {
+	if et.ValidFromNode(gn) {
 		t.Error("Failed this data and edge node don't match")
 	}
 
 	nt, _ = GetOrCreateNodeType("Correct Edge", "Moma")
 	et = edgeType{"Your Moma", []*nodeType{nt}, []*nodeType{nt}}
 	dn, _ = CreateDataNode(nt, []byte("Your Moma"))
-	if !et.ValidToNode(dn) {
+	if !et.ValidToNode(gn) {
 		t.Error("Failed this data and edge node do match")
 	}
-	if !et.ValidFromNode(dn) {
+	if !et.ValidFromNode(gn) {
 		t.Error("Failed this data and edge node do match")
 	}
 }

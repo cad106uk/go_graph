@@ -1,20 +1,20 @@
 package go_graph
 
 type GraphEdge struct {
-	edgeType    edgeType
-	connectFrom dataNode
-	connectTo   dataNode
+	EdgeType    *edgeType
+	ConnectFrom *GraphNode
+	ConnectTo   *GraphNode
 }
 
 // Create new edge. An edge is allowed to link to the same node
-func NewGraphEdge(edTy string, from, to *dataNode) (GraphEdge, error) {
+func NewGraphEdge(edTy string, from, to *GraphNode) (GraphEdge, error) {
 	ge := GraphEdge{}
 	et, err := GetEdgeType(edTy)
 	if err != nil {
 		return ge, err
 	}
 
-	if from.id == "" {
+	if from.value.id == "" {
 		return ge, error(&NodeError{"The from dataNode has not been initialised"})
 	}
 	match := et.ValidFromNode(*from)
@@ -22,20 +22,20 @@ func NewGraphEdge(edTy string, from, to *dataNode) (GraphEdge, error) {
 		return ge, error(&NodeError{"The from dataNode is invalid for this edge type"})
 	}
 	tmp := dataNode{}
-	if to.id == tmp.id {
+	if to.value.id == tmp.id {
 		to = from
 	}
 
-	if to.id == "" {
+	if to.value.id == "" {
 		return ge, error(&NodeError{"The to dataNode hsa not been initialised"})
 	}
 	match = et.ValidToNode(*to)
 	if !match {
 		return ge, error(&NodeError{"The to dataNode is invalid for this edge type"})
 	}
-	ge.edgeType = et
-	ge.connectFrom = *from
-	ge.connectTo = *to
+	ge.EdgeType = et
+	ge.ConnectFrom = from
+	ge.ConnectTo = to
 	return ge, nil
 }
 

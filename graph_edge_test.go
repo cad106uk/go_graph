@@ -10,34 +10,36 @@ func TestNew(t *testing.T) {
 	fromData, _ := CreateDataNode(fromEdge, []byte("Your Moma"))
 	toEdge, _ := GetOrCreateNodeType("ValidTo", "Moma")
 	toData, _ := CreateDataNode(toEdge, []byte("Your Moma"))
-	failNode := dataNode{}
+	failNode := GraphNode{}
 	et, _ := CreateEdgeType("Your Moma", []*nodeType{fromEdge}, []*nodeType{toEdge})
+	fromGN := GraphNode{fromData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
+	toGN := GraphNode{toData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 
-	ge, err := NewGraphEdge("FAIL", &fromData, &toData)
+	_, err := NewGraphEdge("FAIL", &fromGN, &toGN)
 	if err == nil {
 		t.Error("This edge was not made. This should fail")
 	}
-	ge, err = NewGraphEdge("Your Moma", &fromData, &toData)
+	ge, err := NewGraphEdge("Your Moma", &fromGN, &toGN)
 	if err != nil {
 		t.Error(err) // This should fail
 	}
 
-	if ge.edgeType.edgeTypeName != et.edgeTypeName {
+	if ge.EdgeType.edgeTypeName != et.edgeTypeName {
 		t.Error("edgeType problem")
 	}
-	if ge.connectFrom.id != fromData.id {
+	if ge.ConnectFrom.value.id != fromData.id {
 		t.Error("The from data shold match")
 	}
-	if ge.connectTo.id != toData.id {
+	if ge.ConnectTo.value.id != toData.id {
 		t.Error("The To data should match")
 	}
 
-	ge, err = NewGraphEdge("Your Moma", &failNode, &toData)
+	_, err = NewGraphEdge("Your Moma", &failNode, &toGN)
 	if err == nil {
 		t.Error("Bad from node should have stopped this")
 	}
 
-	ge, err = NewGraphEdge("Your Moma", &fromData, &failNode)
+	_, err = NewGraphEdge("Your Moma", &fromGN, &failNode)
 	if err == nil {
 		t.Error("Bad to node should have stopped this")
 	}
