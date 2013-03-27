@@ -1,7 +1,5 @@
 package go_graph
 
-import "fmt"
-
 func matchEdgeType(name *nodeType, validSlice []*nodeType) bool {
 	match := false
 	for _, val := range validSlice {
@@ -36,14 +34,6 @@ func (et *edgeType) GetValidToNode() []*nodeType {
 
 // Can this edge connect to spcific node?
 func (et *edgeType) ValidToNode(to GraphNode) bool {
-	fmt.Println("------------------------------")
-	fmt.Println(to)
-	fmt.Println(to.value)
-	fmt.Println(to.value.dataType)
-	fmt.Println("------------------------------")
-	fmt.Println(et)
-	fmt.Println(et.validToNodes)
-	fmt.Println("------------------------------")
 	return matchEdgeType(to.value.dataType, et.validToNodes)
 }
 

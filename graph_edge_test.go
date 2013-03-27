@@ -2,6 +2,11 @@ package go_graph
 
 import "testing"
 
+/*
+Create an Edge Type, so we can have edges of this type.
+Then create an actual edge of this type.
+So we know the types of relations before we create them.
+*/
 func TestNew(t *testing.T) {
 	// Clean the data
 	all_edge_types = make(map[string]edgeType)

@@ -13,16 +13,6 @@ created after 2 GraphNodes have agreed the edge can be made).
 
 package go_graph
 
-func appendGraphEdge(edge []GraphEdge, val GraphEdge) ([]GraphEdge, error) {
-	edge_len := len(edge)
-	new_edge := make([]GraphEdge, edge_len+1)
-	for i := 0; i < edge_len; i++ {
-		new_edge[i] = edge[i]
-	}
-	new_edge[edge_len+1] = val
-	return new_edge, nil
-}
-
 type GraphNode struct {
 	value       dataNode
 	connectFrom []GraphEdge // The GraphEdges that use this node as a starting point
@@ -43,16 +33,16 @@ func (gn *GraphNode) SetValue(input data) error {
 	return nil
 }
 
-func (gn *GraphNode) Init(nt *nodeType, input []byte, from, to GraphEdge) error {
-	dn, err := CreateDataNode(nt, input)
+func (gn *GraphNode) Init(nt *nodeType, input data, from, to GraphEdge) error {
+	dn, err := CreateDataNode(nt, input.data)
 	if err != nil {
 		return err
 	}
-	conTo, err := appendGraphEdge(gn.connectTo, to)
+	conTo := append(gn.connectTo, to)
 	if err != nil {
 		return err
 	}
-	conFrom, err := appendGraphEdge(gn.connectFrom, from)
+	conFrom := append(gn.connectFrom, from)
 	if err != nil {
 	}
 
@@ -63,19 +53,13 @@ func (gn *GraphNode) Init(nt *nodeType, input []byte, from, to GraphEdge) error 
 }
 
 func (gn *GraphNode) AddFromEdge(from GraphEdge) error {
-	new_edge, err := appendGraphEdge(gn.connectFrom, from)
-	if err != nil {
-		return err
-	}
+	new_edge := append(gn.connectFrom, from)
 	gn.connectFrom = new_edge
 	return nil
 }
 
 func (gn *GraphNode) AddToEdge(to GraphEdge) error {
-	new_edge, err := appendGraphEdge(gn.connectTo, to)
-	if err != nil {
-		return err
-	}
+	new_edge := append(gn.connectTo, to)
 	gn.connectTo = new_edge
 	return nil
 }
