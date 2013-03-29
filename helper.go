@@ -21,7 +21,7 @@ func (ne *NodeError) Error() string {
 func genRandNum() []byte {
 	count := 1024
 	randStore := make([]byte, count)
-	_, err := io.ReadFull(rand.Reader, rand_store)
+	_, err := io.ReadFull(rand.Reader, randStore)
 	if err != nil {
 		// It is either this panic. Though panic might be better
 		genRandNum()
@@ -35,9 +35,9 @@ var genIdsOnce sync.Once
 
 func bufferNewIds(done <-chan struct{}) {
 	for {
-		rand_store := genRandNum()
+		randStore := genRandNum()
 		hasher := sha1.New()
-		hasher.Write(rand_store)
+		hasher.Write(randStore)
 		select {
 		case <-done:
 			//End now

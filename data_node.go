@@ -36,7 +36,7 @@ func CreateDataNode(t *nodeType, d []byte) (dataNode, error) {
 	newNode.dataType = t
 	newNode.setValue.Do(func() {
 		newNode.data = newData
-		newNode.id = string(<-id_buffer)
+		newNode.id = string(<-idBuffer)
 	})
 
 	return newNode, nil
