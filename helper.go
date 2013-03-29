@@ -20,35 +20,35 @@ func (ne *NodeError) Error() string {
 
 func genRandNum() []byte {
 	count := 1024
-	rand_store := make([]byte, count)
+	randStore := make([]byte, count)
 	_, err := io.ReadFull(rand.Reader, rand_store)
 	if err != nil {
 		// It is either this panic. Though panic might be better
 		genRandNum()
 	}
-	return rand_store
+	return randStore
 }
 
-var id_buffer chan []byte = make(chan []byte, 10)
-var end_buffer chan struct{} = make(chan struct{}, 1)
-var gen_ids_once sync.Once
+var idBuffer chan []byte = make(chan []byte, 10)
+var endBuffer chan struct{} = make(chan struct{}, 1)
+var genIdsOnce sync.Once
 
-func bufferNewIds(done <- chan struct {}) {
+func bufferNewIds(done <-chan struct{}) {
 	for {
 		rand_store := genRandNum()
 		hasher := sha1.New()
 		hasher.Write(rand_store)
 		select {
-		case <- done:
+		case <-done:
 			//End now
 			return
-		case id_buffer <- hasher.Sum(nil)[0:20]:
+		case idBuffer <- hasher.Sum(nil)[0:20]:
 		}
 	}
 }
 
 func genIds() {
-	gen_ids_once.Do(func() {
-		go bufferNewIds(end_buffer)
+	genIdsOnce.Do(func() {
+		go bufferNewIds(endBuffer)
 	})
 }

@@ -25,7 +25,7 @@ is to limit what connections it can have.
 */
 func TestEdgeType(t *testing.T) {
 	// Clean the data
-	all_edge_types = make(map[string]edgeType)
+	allEdgeTypes = make(map[string]edgeType)
 
 	// Test the failing edge connections
 	FailFrom1, _ := GetOrCreateNodeType("FailFrom1", "Your Moma")
@@ -67,17 +67,16 @@ func TestEdgeType(t *testing.T) {
 		t.Error("There should be no graph edge here.")
 	}
 
-
 	// Show the graph edges only building correct edges
-	nt_correct_from, _ := GetOrCreateNodeType("Correct From Edge", "Moma")
-	correctFrom, _ := CreateDataNode(nt_correct_from, []byte("Your Moma"))
+	ntCorrectFrom, _ := GetOrCreateNodeType("Correct From Edge", "Moma")
+	correctFrom, _ := CreateDataNode(ntCorrectFrom, []byte("Your Moma"))
 	fromGNcorrect := GraphNode{correctFrom, make([]GraphEdge, 0), make([]GraphEdge, 0)}
-	correctFromArgs := []*nodeType{nt_correct_from}
+	correctFromArgs := []*nodeType{ntCorrectFrom}
 
-	nt_correct_to, _ := GetOrCreateNodeType("Correct To Edge", "Moma")
-	correctTo, _ := CreateDataNode(nt_correct_to, []byte("Your Moma"))
+	ntCorrectTo, _ := GetOrCreateNodeType("Correct To Edge", "Moma")
+	correctTo, _ := CreateDataNode(ntCorrectTo, []byte("Your Moma"))
 	toGNcorrect := GraphNode{correctTo, make([]GraphEdge, 0), make([]GraphEdge, 0)}
-	correctToArgs := []*nodeType{nt_correct_to}
+	correctToArgs := []*nodeType{ntCorrectTo}
 
 	CreateEdgeType("Correct Edge", correctFromArgs, correctToArgs)
 
@@ -92,29 +91,29 @@ func TestEdgeType(t *testing.T) {
 		t.Error("the data node and the from edge type should not match")
 	}
 
-	et_from, _ := NewGraphEdge("Correct Edge", &fromGNcorrect, &toGNcorrect)
-	dn_from, _ := CreateDataNode(nt_correct_from, []byte("Your Moma"))
+	etFrom, _ := NewGraphEdge("Correct Edge", &fromGNcorrect, &toGNcorrect)
+	dnFrom, _ := CreateDataNode(ntCorrectFrom, []byte("Your Moma"))
 	gn = GraphNode{}
-	gn.Init(nt_correct_from, dn_from.data, et_from, et)
+	gn.Init(ntCorrectFrom, dnFrom.data, etFrom, et)
 	// The correct from node type and correct from edge
-	if !et_from.EdgeType.ValidFromNode(gn) {
+	if !etFrom.EdgeType.ValidFromNode(gn) {
 		t.Error("Failed this data and edge node do match")
 	}
 	// The to part of the edge to not set for this graph node
-	if et_from.EdgeType.ValidToNode(gn) {
+	if etFrom.EdgeType.ValidToNode(gn) {
 		t.Error("Failed this data and edge node don't match")
 	}
 
-	et_to, _ := NewGraphEdge("Correct Edge", &fromGNcorrect, &toGNcorrect)
-	dn_to, _ := CreateDataNode(nt_correct_to, []byte("Your Moma"))
+	etTo, _ := NewGraphEdge("Correct Edge", &fromGNcorrect, &toGNcorrect)
+	dnTo, _ := CreateDataNode(ntCorrectTo, []byte("Your Moma"))
 	gn = GraphNode{}
-	gn.Init(nt_correct_to, dn_to.data, et, et_to)
+	gn.Init(ntCorrectTo, dnTo.data, et, etTo)
 	// The from part of the edge to not set for this graph node
-	if et_to.EdgeType.ValidFromNode(gn) {
+	if etTo.EdgeType.ValidFromNode(gn) {
 		t.Error("Failed this data and edge node don't match")
 	}
 	// The correct to node type and correct to edge
-	if !et_to.EdgeType.ValidToNode(gn) {
+	if !etTo.EdgeType.ValidToNode(gn) {
 		t.Error("Failed this data and edge node do match")
 	}
 }
@@ -127,7 +126,7 @@ func TestGetEdgeType(t *testing.T) {
 }
 
 func TestCreateEdgeType(t *testing.T) {
-	all_edge_types = make(map[string]edgeType)
+	allEdgeTypes = make(map[string]edgeType)
 	validFromArgs := []*nodeType{
 		&nodeType{"ValidFrom1", "Your Moma"},
 		&nodeType{"ValidFrom2", "Your Moma"}}

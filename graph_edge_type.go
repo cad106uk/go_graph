@@ -42,10 +42,10 @@ func (et *edgeType) ValidFromNode(from GraphNode) bool {
 	return matchEdgeType(from.value.dataType, et.validFromNodes)
 }
 
-var all_edge_types map[string]edgeType = make(map[string]edgeType)
+var allEdgeTypes map[string]edgeType = make(map[string]edgeType)
 
 func GetEdgeType(name string) (*edgeType, error) {
-	val, present := all_edge_types[name]
+	val, present := allEdgeTypes[name]
 	if !present {
 		return &edgeType{}, error(&NodeError{"This edgeType does not exist"})
 	}
@@ -53,12 +53,12 @@ func GetEdgeType(name string) (*edgeType, error) {
 }
 
 func CreateEdgeType(name string, validFrom, validTo []*nodeType) (edgeType, error) {
-	_, present := all_edge_types[name]
+	_, present := allEdgeTypes[name]
 	if present {
 		return edgeType{}, error(&NodeError{"An EdgeType with this name has already been created"})
 	}
 
-	new_edge := edgeType{name, validFrom, validTo}
-	all_edge_types[name] = new_edge
-	return new_edge, nil
+	newEdge := edgeType{name, validFrom, validTo}
+	allEdgeTypes[name] = newEdge
+	return newEdge, nil
 }

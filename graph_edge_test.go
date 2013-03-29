@@ -9,7 +9,7 @@ So we know the types of relations before we create them.
 */
 func TestNew(t *testing.T) {
 	// Clean the data
-	all_edge_types = make(map[string]edgeType)
+	allEdgeTypes = make(map[string]edgeType)
 
 	fromEdge, _ := GetOrCreateNodeType("ValidFrom", "Moma")
 	fromData, _ := CreateDataNode(fromEdge, []byte("Your Moma"))
@@ -50,5 +50,5 @@ func TestNew(t *testing.T) {
 	}
 
 	// Clean the data
-	all_edge_types = make(map[string]edgeType)
+	allEdgeTypes = make(map[string]edgeType)
 }
