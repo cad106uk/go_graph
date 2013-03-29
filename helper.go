@@ -18,27 +18,37 @@ func (ne *NodeError) Error() string {
 	return ne.msg
 }
 
-func genRandNum() *[]byte {
+func genRandNum() []byte {
 	count := 1024
 	rand_store := make([]byte, count)
-	io.ReadFull(rand.Reader, rand_store)
-	return &rand_store
+	_, err := io.ReadFull(rand.Reader, rand_store)
+	if err != nil {
+		// It is either this panic. Though panic might be better
+		genRandNum()
+	}
+	return rand_store
 }
 
 var id_buffer chan []byte = make(chan []byte, 10)
+var end_buffer chan struct{} = make(chan struct{}, 1)
 var gen_ids_once sync.Once
 
-func bufferNewIds() {
+func bufferNewIds(done <- chan struct {}) {
 	for {
 		rand_store := genRandNum()
 		hasher := sha1.New()
-		hasher.Write(*rand_store)
-		id_buffer <- hasher.Sum(nil)[0:20]
+		hasher.Write(rand_store)
+		select {
+		case <- done:
+			//End now
+			return
+		case id_buffer <- hasher.Sum(nil)[0:20]:
+		}
 	}
 }
 
 func genIds() {
 	gen_ids_once.Do(func() {
-		go bufferNewIds()
+		go bufferNewIds(end_buffer)
 	})
 }
