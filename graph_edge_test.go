@@ -1,3 +1,17 @@
+/*
+ data is kept in dataNode
+ dataNode has a nodeType
+ nodeType has a name and a description
+
+ GraphNode has 1 and only 1 value which is a dataNode
+ GraphNode has 2 lists of GraphEdges 1 for all the GraphEdges that connect from this GraphNode and 1 for all the GraphEdges that connect to this GraphNode
+
+ GraphEdge has an edgeType and connects from 1 GraphNode to another GraphNode
+
+ A GraphEdge can only connect 2 GraphNodes together. A GraphNode can have many GraphEdges.
+
+ Also the GraphNode and GraphEdge are public and for the rest of the system to use. The dataNode and nodeType are private internal structs
+*/
 package go_graph
 
 import "testing"
@@ -20,10 +34,12 @@ func TestNew(t *testing.T) {
 	fromGN := GraphNode{fromData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 	toGN := GraphNode{toData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 
+	//No edge type called GAIL
 	_, err := NewGraphEdge("FAIL", &fromGN, &toGN)
 	if err == nil {
 		t.Error("This edge was not made. This should fail")
 	}
+	//Have created an edge type called "Your Moma" with the CreateEdgeType function
 	ge, err := NewGraphEdge("Your Moma", &fromGN, &toGN)
 	if err != nil {
 		t.Error(err) // This should fail
