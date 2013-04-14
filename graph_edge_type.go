@@ -52,6 +52,7 @@ var allEdgeTypes = struct {
 func GetEdgeType(name string) (*edgeType, error) {
 	allEdgeTypes.RLock()
 	defer allEdgeTypes.RUnlock()
+
 	val, present := allEdgeTypes.m[name]
 	if !present {
 		return &edgeType{}, error(&NodeError{"This edgeType does not exist"})
@@ -62,6 +63,7 @@ func GetEdgeType(name string) (*edgeType, error) {
 func CreateEdgeType(name string, validFrom, validTo []*nodeType) (edgeType, error) {
 	allEdgeTypes.Lock()
 	defer allEdgeTypes.Unlock()
+
 	_, present := allEdgeTypes.m[name]
 	if present {
 		return edgeType{}, error(&NodeError{"An EdgeType with this name has already been created"})

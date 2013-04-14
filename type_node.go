@@ -15,6 +15,7 @@ var allNodeTypes = struct {
 func CreateNewNodeType(name, desc string) error {
 	allNodeTypes.Lock()
 	defer allNodeTypes.Unlock()
+
 	_, present := allNodeTypes.m[name]
 	if present {
 		return error(&NodeError{"A NodeType with this name has already been created"})
@@ -27,6 +28,7 @@ func CreateNewNodeType(name, desc string) error {
 func GetNodeType(name string) (*nodeType, error) {
 	allNodeTypes.RLock()
 	defer allNodeTypes.RUnlock()
+
 	val, present := allNodeTypes.m[name]
 	if !present {
 		return &nodeType{}, error(&NodeError{"No NodeType with this name exists"})

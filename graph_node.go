@@ -75,11 +75,3 @@ func New(nt *nodeType, input []byte, from, to GraphEdge) (GraphNode, error) {
 	gn.AddFromEdge(from)
 	return gn, nil
 }
-
-// // A.ConnectTo(B) Means A->From-GraphEdge-To->B
-// // If the types allow.
-// func (g *GraphNode) ConnectTo(node GraphNode) error {
-// 	g.connectsTo = append(g.connectsTo, node.dataNode)
-// 	node.connectedFrom = append(node.connectedFrom, g.dataNode)
-// 	return nil
-// }
