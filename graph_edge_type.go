@@ -1,5 +1,7 @@
 package go_graph
 
+import "sync"
+
 func matchEdgeType(name *nodeType, validSlice []*nodeType) bool {
 	match := false
 	for _, val := range validSlice {
@@ -42,10 +44,15 @@ func (et *edgeType) ValidFromNode(from GraphNode) bool {
 	return matchEdgeType(from.value.dataType, et.validFromNodes)
 }
 
-var allEdgeTypes map[string]edgeType = make(map[string]edgeType)
+var allEdgeTypes = struct {
+	sync.RWMutex
+	m map[string]edgeType
+}{m: make(map[string]edgeType)}
 
 func GetEdgeType(name string) (*edgeType, error) {
-	val, present := allEdgeTypes[name]
+	allEdgeTypes.RLock()
+	defer allEdgeTypes.RUnlock()
+	val, present := allEdgeTypes.m[name]
 	if !present {
 		return &edgeType{}, error(&NodeError{"This edgeType does not exist"})
 	}
@@ -53,12 +60,14 @@ func GetEdgeType(name string) (*edgeType, error) {
 }
 
 func CreateEdgeType(name string, validFrom, validTo []*nodeType) (edgeType, error) {
-	_, present := allEdgeTypes[name]
+	allEdgeTypes.Lock()
+	defer allEdgeTypes.Unlock()
+	_, present := allEdgeTypes.m[name]
 	if present {
 		return edgeType{}, error(&NodeError{"An EdgeType with this name has already been created"})
 	}
 
 	newEdge := edgeType{name, validFrom, validTo}
-	allEdgeTypes[name] = newEdge
+	allEdgeTypes.m[name] = newEdge
 	return newEdge, nil
 }

@@ -25,7 +25,7 @@ is to limit what connections it can have.
 */
 func TestEdgeType(t *testing.T) {
 	// Clean the data
-	allEdgeTypes = make(map[string]edgeType)
+	allEdgeTypes.m = make(map[string]edgeType)
 
 	// Test the failing edge connections
 	FailFrom1, _ := GetOrCreateNodeType("FailFrom1", "Your Moma")
@@ -126,7 +126,7 @@ func TestGetEdgeType(t *testing.T) {
 }
 
 func TestCreateEdgeType(t *testing.T) {
-	allEdgeTypes = make(map[string]edgeType)
+	allEdgeTypes.m = make(map[string]edgeType)
 	validFromArgs := []*nodeType{
 		&nodeType{"ValidFrom1", "Your Moma"},
 		&nodeType{"ValidFrom2", "Your Moma"}}
