@@ -3,11 +3,11 @@ package go_graph
 import "testing"
 
 func setUp() {
-	allNodeTypes = make(map[string]nodeType)
+	allNodeTypes.m = make(map[string]nodeType)
 }
 
 func tearDown() {
-	allNodeTypes = make(map[string]nodeType)
+	allNodeTypes.m = make(map[string]nodeType)
 }
 
 func TestCreateNewNodeType(t *testing.T) {
@@ -17,7 +17,7 @@ func TestCreateNewNodeType(t *testing.T) {
 		t.Error("Expected no error got", err)
 	}
 
-	val, present := allNodeTypes["Your"]
+	val, present := allNodeTypes.m["Your"]
 	if !present {
 		t.Error("Expected saved NodeType was not created.")
 	}
@@ -44,7 +44,7 @@ func TestCreateNewNodeType(t *testing.T) {
 		t.Error("Expected no error for second node got", err)
 	}
 
-	val, present = allNodeTypes["Moma"]
+	val, present = allNodeTypes.m["Moma"]
 	if !present {
 		t.Error("Expected second saved NodeType was not created.")
 	}
@@ -97,7 +97,7 @@ func TestGetOrCreateNodeType(t *testing.T) {
 		t.Error("Failed to create with error", err)
 	}
 
-	val, present := allNodeTypes["Your"]
+	val, present := allNodeTypes.m["Your"]
 	if !present {
 		t.Error("Expected saved NodeType was not created.")
 	}

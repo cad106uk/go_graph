@@ -1,24 +1,33 @@
 package go_graph
 
+import "sync"
+
 type nodeType struct {
 	name        string
 	description string
 }
 
-var allNodeTypes = make(map[string]nodeType)
+var allNodeTypes = struct {
+	sync.RWMutex
+	m map[string]nodeType
+}{m: make(map[string]nodeType)}
 
 func CreateNewNodeType(name, desc string) error {
-	_, present := allNodeTypes[name]
+	allNodeTypes.Lock()
+	defer allNodeTypes.Unlock()
+	_, present := allNodeTypes.m[name]
 	if present {
 		return error(&NodeError{"A NodeType with this name has already been created"})
 	}
 
-	allNodeTypes[name] = nodeType{name, desc}
+	allNodeTypes.m[name] = nodeType{name, desc}
 	return nil
 }
 
 func GetNodeType(name string) (*nodeType, error) {
-	val, present := allNodeTypes[name]
+	allNodeTypes.RLock()
+	defer allNodeTypes.RUnlock()
+	val, present := allNodeTypes.m[name]
 	if !present {
 		return &nodeType{}, error(&NodeError{"No NodeType with this name exists"})
 	}
