@@ -11,6 +11,25 @@ package go_graph
 */
 
 type pathWalker interface {
-	nextStep(node *GraphNode) (edges []GraphEdge, err Error)
-	takeStep(edge *GraphEdge) (nodes []GraphNode, err Error)
+	NextStep(node *GraphNode) (edges []GraphEdge, err NodeError) // Each node has many edges
+	TakeStep(edge *GraphEdge) (node GraphNode, err NodeError)    // Each edge points to only 1 node.
+}
+
+type PathOutput struct {
+	FromNode    *GraphNode
+	ConnectEdge *GraphEdge
+	ToNode      *GraphNode
+}
+
+type ArrayWalkStringNodesOutput struct {
+	edges      [][]string
+	OutputChan chan []GraphNode
+}
+
+func (aws *ArrayWalkStringNodesOutput) NextStep(node *GraphNode) (edges []GraphEdge, err NodeError) {
+	// Write me
+}
+
+func (aws *ArrayWalkStringNodesOutput) TakeStep(edge *GraphEdge) (node GraphNode, err NodeError) {
+	// Write me
 }
