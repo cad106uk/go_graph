@@ -21,15 +21,40 @@ type PathOutput struct {
 	ToNode      *GraphNode
 }
 
+// A helper function to start walking a graph. Output is the interfaces concern. Always start on a GraphNode
+func StartWalkingPath(pw pathWalker, start *GraphNode) {
+	edges, _ := pw.NextStep(start)
+	for _, val := range edges {
+		go pw.TakeStep(&val)
+	}
+}
+
 type ArrayWalkStringNodesOutput struct {
 	edges      [][]string
-	OutputChan chan []GraphNode
+	OutputChan chan GraphNode
 }
 
-func (aws *ArrayWalkStringNodesOutput) NextStep(node *GraphNode) (edges []GraphEdge, err NodeError) {
-	// Write me
+func (aws *ArrayWalkStringNodesOutput) Init(inputEdges [][]string) {
+	aws.OutputChan = make(chan GraphNode, 10)
+	aws.edges = inputEdges
 }
 
-func (aws *ArrayWalkStringNodesOutput) TakeStep(edge *GraphEdge) (node GraphNode, err NodeError) {
-	// Write me
+func (aws *ArrayWalkStringNodesOutput) NextStep(node *GraphNode) {
+	currentEdges := aws.edges[0]
+	for _, val := range node.connectTo {
+		edgeTypeName := val.EdgeType.edgeTypeName
+		for i := 0; i < len(currentEdges); i++ {
+			if edgeTypeName == currentEdges[i] {
+				newAws := ArrayWalkStringNodesOutput{aws.edges[:1], aws.OutputChan}
+				go newAws.TakeStep(&val)
+			}
+		}
+	}
+
+}
+
+func (aws *ArrayWalkStringNodesOutput) TakeStep(edge *GraphEdge) {
+	node := edge.ConnectTo
+	aws.OutputChan <- *node
+	go aws.NextStep(node)
 }

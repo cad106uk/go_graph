@@ -1,7 +1,7 @@
 package go_graph
 
 /*
- We need to let user build er there own custom search algorithims.
+ We need to let user build er there own custom search algorithims. There are predefined algos in graph_path.go that maybe useful here. 
 
  These need to be stored so they can be used again. (And deleted)
 
@@ -19,5 +19,5 @@ package go_graph
 
  Each step will be done in a seperate goroutine. That is each time we go down a graph edge we will do so in a different gorourine. Each goroutine wil also be passed the search criteria.
 
-The first draft of the search criteria will be a simple list of arrays to consists of node - edge - node - edge so we can fan out our search. This will probably need to be improved on.
+ The first draft of the search criteria will be a simple list of arrays to consists of node - edge - node - edge so we can fan out our search. This will probably need to be improved on.
 */
