@@ -2,10 +2,10 @@ package go_graph
 
 import "sync"
 
-func matchEdgeType(name *nodeType, validSlice []*nodeType) bool {
+func matchEdgeType(name *nodeType, validSlice []nodeType) bool {
 	match := false
 	for _, val := range validSlice {
-		if name == val {
+		if *name == val {
 			match = true
 			break
 		}
@@ -15,8 +15,8 @@ func matchEdgeType(name *nodeType, validSlice []*nodeType) bool {
 
 type edgeType struct {
 	edgeTypeName   string
-	validFromNodes []*nodeType // A list of node types
-	validToNodes   []*nodeType // A list of node types
+	validFromNodes []nodeType // A list of node types
+	validToNodes   []nodeType // A list of node types
 }
 
 // The name of this edgeType
@@ -25,12 +25,12 @@ func (et *edgeType) GetName() string {
 }
 
 // The list of nodes this edge can connect from
-func (et *edgeType) GetValidFromNodes() []*nodeType {
+func (et *edgeType) GetValidFromNodes() []nodeType {
 	return et.validFromNodes
 }
 
 // The list of  nodes this edge can connect to
-func (et *edgeType) GetValidToNode() []*nodeType {
+func (et *edgeType) GetValidToNode() []nodeType {
 	return et.validToNodes
 }
 
@@ -60,7 +60,7 @@ func GetEdgeType(name string) (*edgeType, error) {
 	return &val, nil
 }
 
-func CreateEdgeType(name string, validFrom, validTo []*nodeType) (edgeType, error) {
+func CreateEdgeType(name string, validFrom, validTo []nodeType) (edgeType, error) {
 	allEdgeTypes.Lock()
 	defer allEdgeTypes.Unlock()
 

@@ -50,7 +50,6 @@ func (aws *ArrayWalkStringNodesOutput) NextStep(node *GraphNode) {
 			}
 		}
 	}
-
 }
 
 func (aws *ArrayWalkStringNodesOutput) TakeStep(edge *GraphEdge) {

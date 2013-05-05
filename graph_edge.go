@@ -41,23 +41,23 @@ func NewGraphEdge(edTy string, from, to *GraphNode) (GraphEdge, error) {
 
 // To handle a set of relation eg. Famly would holed brother, sister etc
 type RelationSet struct {
-	edgeTypes []*edgeType
+	edgeTypes []edgeType
 	name      string
 }
 
-func nodeInList(list []*nodeType, ele *nodeType) bool {
+func nodeInList(list []nodeType, ele *nodeType) bool {
 	for _, val := range list {
-		if val == ele {
+		if &val == ele {
 			return true
 		}
 	}
 	return false
 }
 
-func handleRelSetValid(validList, exploreList []*nodeType) (bool, *nodeType) {
+func handleRelSetValid(validList, exploreList []nodeType) (bool, *nodeType) {
 	for _, nt := range validList {
-		if nodeInList(exploreList, nt) {
-			return true, nt
+		if nodeInList(exploreList, &nt) {
+			return true, &nt
 		}
 	}
 	return false, &nodeType{}

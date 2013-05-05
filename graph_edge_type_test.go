@@ -6,7 +6,7 @@ func TestMatchEdgeType(t *testing.T) {
 	find, _ := GetOrCreateNodeType("find", "Your")
 	invalid, _ := GetOrCreateNodeType("invalid", "Moma")
 	junk, _ := GetOrCreateNodeType("junk", "junk")
-	options := []*nodeType{find, junk}
+	options := []nodeType{*find, *junk}
 	t1 := matchEdgeType(find, options)
 	if !t1 {
 		t.Error("Can't find find!")
@@ -30,12 +30,12 @@ func TestEdgeType(t *testing.T) {
 	// Test the failing edge connections
 	FailFrom1, _ := GetOrCreateNodeType("FailFrom1", "Your Moma")
 	FailFrom2, _ := GetOrCreateNodeType("FailFrom2", "Your Moma")
-	failFromArgs := []*nodeType{FailFrom1, FailFrom2}
+	failFromArgs := []nodeType{*FailFrom1, *FailFrom2}
 	fromData, _ := CreateDataNode(FailFrom1, []byte("Your Moma"))
 
 	FailTo1, _ := GetOrCreateNodeType("FailTo1", "Your Moma")
 	FailTo2, _ := GetOrCreateNodeType("FailTo2", "Your Moma")
-	failToArgs := []*nodeType{FailTo1, FailTo2}
+	failToArgs := []nodeType{*FailTo1, *FailTo2}
 	toData, _ := CreateDataNode(FailTo1, []byte("Your Moma"))
 
 	CreateEdgeType("Your Moma", failFromArgs, failToArgs)
@@ -71,12 +71,12 @@ func TestEdgeType(t *testing.T) {
 	ntCorrectFrom, _ := GetOrCreateNodeType("Correct From Edge", "Moma")
 	correctFrom, _ := CreateDataNode(ntCorrectFrom, []byte("Your Moma"))
 	fromGNcorrect := GraphNode{correctFrom, make([]GraphEdge, 0), make([]GraphEdge, 0)}
-	correctFromArgs := []*nodeType{ntCorrectFrom}
+	correctFromArgs := []nodeType{*ntCorrectFrom}
 
 	ntCorrectTo, _ := GetOrCreateNodeType("Correct To Edge", "Moma")
 	correctTo, _ := CreateDataNode(ntCorrectTo, []byte("Your Moma"))
 	toGNcorrect := GraphNode{correctTo, make([]GraphEdge, 0), make([]GraphEdge, 0)}
-	correctToArgs := []*nodeType{ntCorrectTo}
+	correctToArgs := []nodeType{*ntCorrectTo}
 
 	CreateEdgeType("Correct Edge", correctFromArgs, correctToArgs)
 
@@ -127,12 +127,12 @@ func TestGetEdgeType(t *testing.T) {
 
 func TestCreateEdgeType(t *testing.T) {
 	allEdgeTypes.m = make(map[string]edgeType)
-	validFromArgs := []*nodeType{
-		&nodeType{"ValidFrom1", "Your Moma"},
-		&nodeType{"ValidFrom2", "Your Moma"}}
-	validToArgs := []*nodeType{
-		&nodeType{"ValidTo1", "Your Moma"},
-		&nodeType{"ValidTo2", "Your Moma"}}
+	validFromArgs := []nodeType{
+		nodeType{"ValidFrom1", "Your Moma"},
+		nodeType{"ValidFrom2", "Your Moma"}}
+	validToArgs := []nodeType{
+		nodeType{"ValidTo1", "Your Moma"},
+		nodeType{"ValidTo2", "Your Moma"}}
 	et, err := CreateEdgeType("Your Moma", validFromArgs, validToArgs)
 	if err != nil {
 		t.Error(err)

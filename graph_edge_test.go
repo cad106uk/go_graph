@@ -30,7 +30,7 @@ func TestNew(t *testing.T) {
 	toEdge, _ := GetOrCreateNodeType("ValidTo", "Moma")
 	toData, _ := CreateDataNode(toEdge, []byte("Your Moma"))
 	failNode := GraphNode{}
-	et, _ := CreateEdgeType("Your Moma", []*nodeType{fromEdge}, []*nodeType{toEdge})
+	et, _ := CreateEdgeType("Your Moma", []nodeType{*fromEdge}, []nodeType{*toEdge})
 	fromGN := GraphNode{fromData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 	toGN := GraphNode{toData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 

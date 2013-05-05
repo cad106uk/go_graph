@@ -64,14 +64,12 @@ func (gn *GraphNode) AddToEdge(to GraphEdge) error {
 	return nil
 }
 
-func New(nt *nodeType, input []byte, from, to GraphEdge) (GraphNode, error) {
+func NewGraphNode(nt *nodeType, input []byte) (GraphNode, error) {
 	gn := GraphNode{}
 	dn, err := CreateDataNode(nt, input)
 	if err != nil {
 		return gn, err
 	}
 	gn.value = dn
-	gn.AddToEdge(to)
-	gn.AddFromEdge(from)
 	return gn, nil
 }
