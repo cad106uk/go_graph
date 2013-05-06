@@ -22,41 +22,25 @@ type EdgeStep struct {
 	Edges [][]string
 }
 
+type PathWalker interface {
+	NextStep(node *NodeStep, step chan EdgeStep)
+	TakeStep(edge *EdgeStep, nodeStep chan NodeStep)
+	ProcessEdges()
+	ProcessNodes()
+}
+
+func walkPath(pw PathWalker) {
+	pw.ProcessEdges()
+	pw.ProcessNodes()
+}
+
 type concurrentCount struct {
 	edgeCount int64
 	nodeCount int64
 	edgeStep  chan EdgeStep
 	nodeStep  chan NodeStep
+	output    chan GraphNode
 	once      sync.Once
-}
-
-// A helper function to start walking a graph. Output is the interfaces concern. Always start on a GraphNode
-func StartWalkingPath(edges [][]string, output chan GraphNode, start *GraphNode) {
-	go func() {
-		edgeStep := make(chan EdgeStep, 10)
-		nodeStep := make(chan NodeStep, 10)
-		var once sync.Once
-		cc := concurrentCount{0, 1, edgeStep, nodeStep, once}
-		cc.NextStep(&NodeStep{*start, edges}, edgeStep)
-
-	breakLabel:
-		for {
-			select {
-			case edge, ok := <-edgeStep:
-				if ok {
-					go cc.TakeStep(&edge, nodeStep)
-				}
-			case node, ok := <-nodeStep:
-				if ok {
-					output <- node.Node
-					go cc.NextStep(&node, edgeStep)
-				} else {
-					close(output)
-					break breakLabel
-				}
-			}
-		}
-	}()
 }
 
 // If we have no more running goroutines close down this search
@@ -91,8 +75,57 @@ func (cc *concurrentCount) NextStep(node *NodeStep, step chan EdgeStep) {
 }
 
 func (cc *concurrentCount) TakeStep(edge *EdgeStep, nodeStep chan NodeStep) {
-	cc.nodeCount++
+	defer cc.closeChannels()
 	node := edge.Edge.ConnectTo
 	nodeStep <- NodeStep{*node, edge.Edges}
+	cc.nodeCount++
 	cc.edgeCount--
+}
+
+func (cc *concurrentCount) ProcessEdges() {
+	go func() {
+	breakLabel:
+		for {
+			select {
+			case edge, ok := <-cc.edgeStep:
+				if ok {
+					go cc.TakeStep(&edge, cc.nodeStep)
+				} else {
+					break breakLabel
+				}
+			}
+		}
+	}()
+}
+
+func (cc *concurrentCount) ProcessNodes() {
+	go func() {
+	breakLabel:
+		for {
+			select {
+			case node, ok := <-cc.nodeStep:
+				if ok {
+					cc.output <- node.Node
+					go cc.NextStep(&node, cc.edgeStep)
+				} else {
+					close(cc.output)
+					break breakLabel
+				}
+			}
+		}
+	}()
+}
+
+// A helper function to start walking a graph. Output is the interfaces concern. Always start on a GraphNode
+func StartWalkingPath(edges [][]string, output chan GraphNode, start *GraphNode) {
+	edgeStep := make(chan EdgeStep, 10)
+	nodeStep := make(chan NodeStep, 10)
+	var once sync.Once
+
+	// Setup the graph walker correctly before running it
+	cc := concurrentCount{0, 1, edgeStep, nodeStep, output, once}
+	cc.NextStep(&NodeStep{*start, edges}, edgeStep)
+
+	pw := PathWalker(&cc)
+	walkPath(pw)
 }
