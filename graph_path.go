@@ -60,7 +60,7 @@ func StartWalkingPath(edges [][]string, output chan GraphNode, start *GraphNode)
 }
 
 // If we have no more running goroutines close down this search
-func (cc *concurrentCount) checkClose() {
+func (cc *concurrentCount) closeChannels() {
 	closeChannels := func() {
 		close(cc.edgeStep)
 		close(cc.nodeStep)
@@ -71,9 +71,9 @@ func (cc *concurrentCount) checkClose() {
 }
 
 func (cc *concurrentCount) NextStep(node *NodeStep, step chan EdgeStep) {
-	defer cc.checkClose()
-	cc.nodeCount--
+	defer cc.closeChannels()
 	if len(node.Edges) == 0 {
+		cc.nodeCount--
 		return
 	}
 	currentEdges := node.Edges[0]
@@ -87,12 +87,12 @@ func (cc *concurrentCount) NextStep(node *NodeStep, step chan EdgeStep) {
 			}
 		}
 	}
-
+	cc.nodeCount--
 }
 
 func (cc *concurrentCount) TakeStep(edge *EdgeStep, nodeStep chan NodeStep) {
-	cc.edgeCount--
-	node := edge.Edge.ConnectTo
 	cc.nodeCount++
+	node := edge.Edge.ConnectTo
 	nodeStep <- NodeStep{*node, edge.Edges}
+	cc.edgeCount--
 }
