@@ -65,6 +65,7 @@ stringLabel:
 	}
 
 	output = make(chan GraphNode, 10)
+	arrayPath = [][]string{[]string{"2"}, []string{"5"}}
 	StartArrayRegExWalkingPath(arrayPath, output, &node1)
 	actual = make([]string, 0)
 regexLabel:
