@@ -37,19 +37,44 @@ func TestInit(t *testing.T) {
 
 	arrayPath := [][]string{[]string{"1-2"}, []string{"2-5"}}
 	output := make(chan GraphNode, 10)
-	StartWalkingPath(arrayPath, output, &node1)
+	StartArrayStringWalkingPath(arrayPath, output, &node1)
 
 	// Because string are easily sorted.
 	expected := []string{string(node2.value.data.data), string(node5.value.data.data)}
 	actual := make([]string, 0)
-breakLabel:
+stringLabel:
 	for {
 		select {
 		case node, ok := <-output:
 			if ok {
 				actual = append(actual, string(node.value.data.data))
 			} else {
-				break breakLabel
+				break stringLabel
+			}
+		}
+	}
+	sort.Strings(expected)
+	sort.Strings(actual)
+	if len(expected) != len(actual) {
+		t.Error("Different number of results from path search", len(expected), len(actual))
+	}
+	for i := 0; i < len(expected); i++ {
+		if expected[i] != actual[i] {
+			t.Error("The Patch search is not returned the correct nodes")
+		}
+	}
+
+	output = make(chan GraphNode, 10)
+	StartArrayRegExWalkingPath(arrayPath, output, &node1)
+	actual = make([]string, 0)
+regexLabel:
+	for {
+		select {
+		case node, ok := <-output:
+			if ok {
+				actual = append(actual, string(node.value.data.data))
+			} else {
+				break regexLabel
 			}
 		}
 	}
