@@ -1,5 +1,7 @@
 package go_graph
 
+import "sync"
+
 /*
  This package is not here to find the sortest path, this is here to analyses the structure of the data in the graph.
 
@@ -10,50 +12,87 @@ package go_graph
  * A function to programically decide what to do next
 */
 
-type pathWalker interface {
-	NextStep(node *GraphNode) (edges []GraphEdge, err NodeError) // Each node has many edges
-	TakeStep(edge *GraphEdge) (node GraphNode, err NodeError)    // Each edge points to only 1 node.
+type NodeStep struct {
+	Node  GraphNode
+	Edges [][]string
 }
 
-type PathOutput struct {
-	FromNode    *GraphNode
-	ConnectEdge *GraphEdge
-	ToNode      *GraphNode
+type EdgeStep struct {
+	Edge  GraphEdge
+	Edges [][]string
+}
+
+type concurrentCount struct {
+	edgeCount int64
+	nodeCount int64
+	edgeStep  chan EdgeStep
+	nodeStep  chan NodeStep
+	once      sync.Once
 }
 
 // A helper function to start walking a graph. Output is the interfaces concern. Always start on a GraphNode
-func StartWalkingPath(pw pathWalker, start *GraphNode) {
-	edges, _ := pw.NextStep(start)
-	for _, val := range edges {
-		go pw.TakeStep(&val)
+func StartWalkingPath(edges [][]string, output chan GraphNode, start *GraphNode) {
+	go func() {
+		edgeStep := make(chan EdgeStep, 10)
+		nodeStep := make(chan NodeStep, 10)
+		var once sync.Once
+		cc := concurrentCount{0, 1, edgeStep, nodeStep, once}
+		cc.NextStep(&NodeStep{*start, edges}, edgeStep)
+
+	breakLabel:
+		for {
+			select {
+			case edge, ok := <-edgeStep:
+				if ok {
+					go cc.TakeStep(&edge, nodeStep)
+				}
+			case node, ok := <-nodeStep:
+				if ok {
+					output <- node.Node
+					go cc.NextStep(&node, edgeStep)
+				} else {
+					close(output)
+					break breakLabel
+				}
+			}
+		}
+	}()
+}
+
+// If we have no more running goroutines close down this search
+func (cc *concurrentCount) checkClose() {
+	closeChannels := func() {
+		close(cc.edgeStep)
+		close(cc.nodeStep)
+	}
+	if cc.edgeCount == 0 && cc.nodeCount == 0 {
+		cc.once.Do(closeChannels)
 	}
 }
 
-type ArrayWalkStringNodesOutput struct {
-	edges      [][]string
-	OutputChan chan GraphNode
-}
+func (cc *concurrentCount) NextStep(node *NodeStep, step chan EdgeStep) {
+	defer cc.checkClose()
+	cc.nodeCount--
+	if len(node.Edges) == 0 {
+		return
+	}
+	currentEdges := node.Edges[0]
 
-func (aws *ArrayWalkStringNodesOutput) Init(inputEdges [][]string) {
-	aws.OutputChan = make(chan GraphNode, 10)
-	aws.edges = inputEdges
-}
-
-func (aws *ArrayWalkStringNodesOutput) NextStep(node *GraphNode) {
-	currentEdges := aws.edges[0]
-	for _, val := range node.connectTo {
+	for _, val := range node.Node.connectTo {
 		edgeTypeName := val.EdgeType.edgeTypeName
 		for i := 0; i < len(currentEdges); i++ {
 			if edgeTypeName == currentEdges[i] {
-				newAws := ArrayWalkStringNodesOutput{aws.edges[:1], aws.OutputChan}
-				go newAws.TakeStep(&val)
+				cc.edgeCount++
+				step <- EdgeStep{val, node.Edges[1:]}
 			}
 		}
 	}
+
 }
 
-func (aws *ArrayWalkStringNodesOutput) TakeStep(edge *GraphEdge) {
-	node := edge.ConnectTo
-	aws.OutputChan <- *node
-	go aws.NextStep(node)
+func (cc *concurrentCount) TakeStep(edge *EdgeStep, nodeStep chan NodeStep) {
+	cc.edgeCount--
+	node := edge.Edge.ConnectTo
+	cc.nodeCount++
+	nodeStep <- NodeStep{*node, edge.Edges}
 }

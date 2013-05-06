@@ -1,7 +1,7 @@
 package go_graph
 
 import "testing"
-import "fmt"
+import "sort"
 
 func TestInit(t *testing.T) {
 	nodeType1, _ := GetOrCreateNodeType("nodeType1", "nodeType1")
@@ -35,16 +35,32 @@ func TestInit(t *testing.T) {
 	node4.AddFromEdge(edge3)
 	node5.AddFromEdge(edge4)
 
-	arrayPath := [][]string{[]string{"1-3"}, []string{"2-5"}}
-	aws := ArrayWalkStringNodesOutput{}
-	aws.Init(arrayPath)
-	output := aws.OutputChan
-	aws.NextStep(&node1)
+	arrayPath := [][]string{[]string{"1-2"}, []string{"2-5"}}
+	output := make(chan GraphNode, 10)
+	StartWalkingPath(arrayPath, output, &node1)
 
-	select {
-	case node, ok := <-output:
-		if ok {
-			fmt.Println("Received: ", node.value)
+	// Because string are easily sorted.
+	expected := []string{string(node2.value.data.data), string(node5.value.data.data)}
+	actual := make([]string, 0)
+breakLabel:
+	for {
+		select {
+		case node, ok := <-output:
+			if ok {
+				actual = append(actual, string(node.value.data.data))
+			} else {
+				break breakLabel
+			}
+		}
+	}
+	sort.Strings(expected)
+	sort.Strings(actual)
+	if len(expected) != len(actual) {
+		t.Error("Different number of results from path search", len(expected), len(actual))
+	}
+	for i := 0; i < len(expected); i++ {
+		if expected[i] != actual[i] {
+			t.Error("The Patch search is not returned the correct nodes")
 		}
 	}
 }
