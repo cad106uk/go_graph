@@ -1,4 +1,4 @@
-package go_graph
+package node_edges
 
 import "testing"
 

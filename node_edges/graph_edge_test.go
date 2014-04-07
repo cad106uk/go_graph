@@ -12,9 +12,12 @@
 
  Also the GraphNode and GraphEdge are public and for the rest of the system to use. The dataNode and nodeType are private internal structs
 */
-package go_graph
+package node_edges
 
-import "testing"
+import (
+	"go_graph/data_types"
+	"testing"
+)
 
 /*
 Create an Edge Type, so we can have edges of this type.

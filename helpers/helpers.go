@@ -1,7 +1,7 @@
 // All the helper functions that don't direct functionality for the
 // Graph, but help that functionality along. (Didn't want to call this
 // file lib because that can get really confusing)
-package go_graph
+package helpers
 
 import (
 	"crypto/rand"
@@ -10,12 +10,17 @@ import (
 	"sync"
 )
 
-type NodeError struct {
+type nodeError struct {
 	msg string
 }
 
-func (ne *NodeError) Error() string {
+func (ne *nodeError) Error() string {
 	return ne.msg
+}
+
+func NodeError(val string) (ne *nodeError) {
+	ne.msg = val
+	return ne
 }
 
 func genRandNum() []byte {
@@ -47,8 +52,12 @@ func bufferNewIds(done <-chan struct{}) {
 	}
 }
 
-func genIds() {
+func GenIds() {
 	genIdsOnce.Do(func() {
 		go bufferNewIds(endBuffer)
 	})
+}
+
+func GetId() []byte {
+	return <-idBuffer
 }

@@ -1,6 +1,9 @@
 package go_graph
 
-import "sync"
+import (
+	"go_graph/node_edges"
+	"sync"
+)
 
 /*
  This package is not here to find the sortest path, this is here to analyses the structure of the data in the graph.
@@ -13,12 +16,12 @@ import "sync"
 */
 
 type NodeStep struct {
-	Node  GraphNode
+	Node  node_edges.GraphNode
 	Edges [][]string
 }
 
 type EdgeStep struct {
-	Edge  GraphEdge
+	Edge  node_edges.GraphEdge
 	Edges [][]string
 }
 
@@ -41,6 +44,6 @@ type concurrentCount struct {
 	nodeCount int64
 	edgeStep  chan EdgeStep
 	nodeStep  chan NodeStep
-	output    chan GraphNode
+	output    chan node_edges.GraphNode
 	once      sync.Once
 }

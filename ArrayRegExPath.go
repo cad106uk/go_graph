@@ -1,7 +1,9 @@
 package go_graph
 
-import "regexp"
-import "sync"
+import (
+	"regexp"
+	"sync"
+)
 
 type regexStringCount struct {
 	concurrentCount

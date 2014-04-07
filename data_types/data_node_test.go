@@ -1,4 +1,4 @@
-package go_graph
+package data_types
 
 import (
 	"bytes"
