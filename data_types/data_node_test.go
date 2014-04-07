@@ -22,7 +22,7 @@ func TestCreateDataNode(t *testing.T) {
 	}
 
 	t2 := node.GetValue()
-	if !bytes.Equal(t2.data, node.data.data) {
+	if !bytes.Equal(t2.data, node.NodeData.data) {
 		t.Error("GetValue fail to return the correct data value", t2, node.data)
 	}
 

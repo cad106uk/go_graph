@@ -28,12 +28,12 @@ func TestNew(t *testing.T) {
 	// Clean the data
 	allEdgeTypes.m = make(map[string]edgeType)
 
-	fromEdge, _ := GetOrCreateNodeType("ValidFrom", "Moma")
-	fromData, _ := CreateDataNode(fromEdge, []byte("Your Moma"))
-	toEdge, _ := GetOrCreateNodeType("ValidTo", "Moma")
-	toData, _ := CreateDataNode(toEdge, []byte("Your Moma"))
+	fromEdge, _ := data_types.GetOrCreateNodeType("ValidFrom", "Moma")
+	fromData, _ := data_types.CreateDataNode(fromEdge, []byte("Your Moma"))
+	toEdge, _ := data_types.GetOrCreateNodeType("ValidTo", "Moma")
+	toData, _ := data_types.CreateDataNode(toEdge, []byte("Your Moma"))
 	failNode := GraphNode{}
-	et, _ := CreateEdgeType("Your Moma", []nodeType{*fromEdge}, []nodeType{*toEdge})
+	et, _ := CreateEdgeType("Your Moma", []data_types.NodeType{*fromEdge}, []data_types.NodeType{*toEdge})
 	fromGN := GraphNode{fromData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 	toGN := GraphNode{toData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 
@@ -51,10 +51,10 @@ func TestNew(t *testing.T) {
 	if ge.EdgeType.edgeTypeName != et.edgeTypeName {
 		t.Error("edgeType problem")
 	}
-	if ge.ConnectFrom.value.id != fromData.id {
+	if ge.ConnectFrom.value.GetId() != fromData.GetId() {
 		t.Error("The from data shold match")
 	}
-	if ge.ConnectTo.value.id != toData.id {
+	if ge.ConnectTo.value.GetId() != toData.GetId() {
 		t.Error("The To data should match")
 	}
 

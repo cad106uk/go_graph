@@ -18,9 +18,8 @@ func (ne *nodeError) Error() string {
 	return ne.msg
 }
 
-func NodeError(val string) (ne *nodeError) {
-	ne.msg = val
-	return ne
+func NodeError(val string) *nodeError {
+	return &nodeError{val}
 }
 
 func genRandNum() []byte {

@@ -10,6 +10,10 @@ type NodeType struct {
 	description string
 }
 
+func TempUnstoredNodeType(nam, desc string) NodeType {
+	return NodeType{nam, desc}
+}
+
 var allNodeTypes = struct {
 	sync.RWMutex
 	m map[string]NodeType

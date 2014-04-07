@@ -3,11 +3,11 @@ package data_types
 import "testing"
 
 func setUp() {
-	allNodeTypes.m = make(map[string]nodeType)
+	allNodeTypes.m = make(map[string]NodeType)
 }
 
 func tearDown() {
-	allNodeTypes.m = make(map[string]nodeType)
+	allNodeTypes.m = make(map[string]NodeType)
 }
 
 func TestCreateNewNodeType(t *testing.T) {
@@ -70,9 +70,9 @@ func TestGetNodeType(t *testing.T) {
 	}
 
 	val, err = GetNodeType("FAIL")
-	tmp := nodeType{}
+	tmp := NodeType{}
 	if *val != tmp {
-		t.Error("Didn't return empty nodeType")
+		t.Error("Didn't return empty NodeType")
 	}
 
 	expected := "No NodeType with this name exists"

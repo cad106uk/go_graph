@@ -21,18 +21,17 @@ type GraphNode struct {
 	connectTo   []GraphEdge // The GraphEdges the use this node as an end point
 }
 
-func (gn *GraphNode) GetConnectFrom([]GraphEdges) {
+func (gn *GraphNode) GetConnectFrom() []GraphEdge {
 	return gn.connectFrom
 }
 
-func (gn *GraphNode) GetConnectTo([]GraphEdges) {
+func (gn *GraphNode) GetConnectTo() []GraphEdge {
 	return gn.connectTo
 }
 
 // returns the value that the GraphNode has
-func (gn *GraphNode) Value() (*data_types.NodeData, error) {
-	val := gn.value.NodeData
-	return &val, nil
+func (gn *GraphNode) Value() data_types.NodeData {
+	return gn.value.NodeData
 }
 
 // Set the value this GraphNode stores. Can be called many times but onyl sets a value the first time it has been called.

@@ -1,6 +1,7 @@
 package go_graph
 
 import (
+	"go_graph/node_edges"
 	"regexp"
 	"sync"
 )
@@ -31,8 +32,8 @@ func (rsc *regexStringCount) NextStep(node *NodeStep) {
 		currentEdges = append(currentEdges, *reg)
 	}
 
-	for _, val := range node.Node.connectTo {
-		edgeTypeName := val.EdgeType.edgeTypeName
+	for _, val := range node.Node.GetConnectTo() {
+		edgeTypeName := val.EdgeType.GetName()
 		for i := 0; i < len(currentEdges); i++ {
 			if currentEdges[i].MatchString(edgeTypeName) == true {
 				rsc.edgeCount++
@@ -85,7 +86,7 @@ func (rsc *regexStringCount) ProcessNodes() {
 }
 
 // A helper function to start walking a graph. Output is the interfaces concern. Always start on a GraphNode
-func StartArrayRegExWalkingPath(edges [][]string, output chan GraphNode, start *GraphNode) {
+func StartArrayRegExWalkingPath(edges [][]string, output chan node_edges.GraphNode, start *node_edges.GraphNode) {
 	edgeStep := make(chan EdgeStep, 10)
 	nodeStep := make(chan NodeStep, 10)
 	var once sync.Once
