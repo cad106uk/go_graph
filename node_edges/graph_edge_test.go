@@ -15,7 +15,7 @@
 package node_edges
 
 import (
-	"go_graph/data_types"
+	"github.com/cad106uk/go_graph/data_types"
 	"testing"
 )
 

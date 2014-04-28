@@ -1,7 +1,7 @@
-package go_graph
+package github.com/cad106uk/go_graph
 
 import (
-	"go_graph/node_edges"
+	"github.com/cad106uk/go_graph/node_edges"
 	"sync"
 )
 

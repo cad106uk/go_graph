@@ -1,8 +1,8 @@
-package go_graph
+package github.com/cad106uk/go_graph
 
 import (
-	"go_graph/data_types"
-	"go_graph/node_edges"
+	"github.com/cad106uk/go_graph/data_types"
+	"github.com/cad106uk/go_graph/node_edges"
 	"sort"
 	"testing"
 )

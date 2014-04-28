@@ -1,8 +1,8 @@
 package node_edges
 
 import (
-	"go_graph/data_types"
-	"go_graph/helpers"
+	"github.com/cad106uk/go_graph/data_types"
+	"github.com/cad106uk/go_graph/helpers"
 )
 
 type GraphEdge struct {

@@ -1,7 +1,7 @@
 package data_types
 
 import (
-	"go_graph/helpers"
+	"github.com/cad106uk/go_graph/helpers"
 	"sync"
 )
 

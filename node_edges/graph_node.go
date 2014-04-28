@@ -13,7 +13,7 @@ created after 2 GraphNodes have agreed the edge can be made).
 
 package node_edges
 
-import "go_graph/data_types"
+import "github.com/cad106uk/go_graph/data_types"
 
 type GraphNode struct {
 	value       data_types.DataNode
