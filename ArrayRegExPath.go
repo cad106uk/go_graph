@@ -1,4 +1,4 @@
-package github.com/cad106uk/go_graph
+package go_graph
 
 import (
 	"github.com/cad106uk/go_graph/node_edges"

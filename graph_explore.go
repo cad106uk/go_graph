@@ -1,4 +1,4 @@
-package github.com/cad106uk/go_graph
+package go_graph
 
 /*
  We need to let user build er there own custom search algorithims. There are predefined algos in graph_path.go that maybe useful here. 
