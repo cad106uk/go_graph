@@ -59,7 +59,7 @@ func GetEdgeType(name string) (*edgeType, error) {
 
 	val, present := allEdgeTypes.m[name]
 	if !present {
-		return &edgeType{}, error(helpers.NodeError("This edgeType does not exist"))
+		return nil, error(helpers.NodeError("This edgeType does not exist"))
 	}
 	return &val, nil
 }
@@ -70,7 +70,7 @@ func CreateEdgeType(name string, validFrom, validTo []data_types.NodeType) (edge
 
 	_, present := allEdgeTypes.m[name]
 	if present {
-		return edgeType{}, error(helpers.NodeError("An EdgeType with this name has already been created"))
+		return nil, error(helpers.NodeError("An EdgeType with this name has already been created"))
 	}
 
 	newEdge := edgeType{name, validFrom, validTo}

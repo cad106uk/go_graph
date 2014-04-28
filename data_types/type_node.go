@@ -38,7 +38,7 @@ func GetNodeType(name string) (*NodeType, error) {
 
 	val, present := allNodeTypes.m[name]
 	if !present {
-		return &NodeType{}, error(helpers.NodeError("No NodeType with this name exists"))
+		return nil, error(helpers.NodeError("No NodeType with this name exists"))
 	}
 	return &val, nil
 }
@@ -54,5 +54,5 @@ func GetOrCreateNodeType(name, desc string) (*NodeType, error) {
 		return GetNodeType(name)
 	}
 
-	return &NodeType{}, err
+	return nil, err
 }

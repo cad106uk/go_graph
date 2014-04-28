@@ -13,31 +13,35 @@ type GraphEdge struct {
 
 // Create new edge. An edge is allowed to link to the same node
 func NewGraphEdge(edTy string, from, to *GraphNode) (GraphEdge, error) {
-	ge := GraphEdge{}
 	et, err := GetEdgeType(edTy)
 	if err != nil {
-		return ge, err
+		return nil, err
 	}
 
 	if from.value.GetId() == "" {
-		return ge, error(helpers.NodeError("The from dataNode has not been initialised"))
+		return nil, error(helpers.NodeError("The from dataNode has not been initialised"))
 	}
+
 	match := et.ValidFromNode(*from)
 	if !match {
-		return ge, error(helpers.NodeError("The from dataNode is invalid for this edge type"))
+		return nil, error(helpers.NodeError("The from dataNode is invalid for this edge type"))
 	}
+
 	tmp := data_types.DataNode{}
 	if to.value.GetId() == tmp.GetId() {
 		to = from
 	}
 
 	if to.value.GetId() == "" {
-		return ge, error(helpers.NodeError("The to dataNode hsa not been initialised"))
+		return nil, error(helpers.NodeError("The to dataNode hsa not been initialised"))
 	}
+
 	match = et.ValidToNode(*to)
 	if !match {
-		return ge, error(helpers.NodeError("The to dataNode is invalid for this edge type"))
+		return nil, error(helpers.NodeError("The to dataNode is invalid for this edge type"))
 	}
+
+	ge := GraphEdge{}
 	ge.EdgeType = et
 	ge.ConnectFrom = from
 	ge.ConnectTo = to
@@ -65,7 +69,7 @@ func handleRelSetValid(validList, exploreList []data_types.NodeType) (bool, *dat
 			return true, &nt
 		}
 	}
-	return false, &data_types.NodeType{}
+	return false, nil
 }
 
 func (rs *RelationSet) ValidFromNode(et *edgeType) (*data_types.NodeType, error) {
@@ -75,7 +79,7 @@ func (rs *RelationSet) ValidFromNode(et *edgeType) (*data_types.NodeType, error)
 			return output, nil
 		}
 	}
-	return &data_types.NodeType{}, error(helpers.NodeError("This edge type is not valid for this RelationSet"))
+	return nil, error(helpers.NodeError("This edge type is not valid for this RelationSet"))
 }
 
 func (rs *RelationSet) ValidToNode(et *edgeType) (*data_types.NodeType, error) {
@@ -85,5 +89,5 @@ func (rs *RelationSet) ValidToNode(et *edgeType) (*data_types.NodeType, error) {
 			return output, nil
 		}
 	}
-	return &data_types.NodeType{}, error(helpers.NodeError("This edge type is not valid for this RelationSet"))
+	return nil, error(helpers.NodeError("This edge type is not valid for this RelationSet"))
 }

@@ -47,14 +47,9 @@ func (gn *GraphNode) Init(nt *data_types.NodeType, input data_types.NodeData, fr
 	if err != nil {
 		return err
 	}
-	conTo := append(gn.connectTo, to)
-	if err != nil {
-		return err
-	}
-	conFrom := append(gn.connectFrom, from)
-	if err != nil {
-	}
 
+	conTo := append(gn.connectTo, to)
+	conFrom := append(gn.connectFrom, from)
 	gn.value = dn
 	gn.connectTo = conTo
 	gn.connectFrom = conFrom
@@ -77,7 +72,7 @@ func NewGraphNode(nt *data_types.NodeType, input []byte) (GraphNode, error) {
 	gn := GraphNode{}
 	dn, err := data_types.CreateDataNode(nt, input)
 	if err != nil {
-		return gn, err
+		return nil, err
 	}
 	gn.value = dn
 	return gn, nil

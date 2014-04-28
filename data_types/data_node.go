@@ -38,8 +38,7 @@ func CreateDataNode(t *NodeType, d []byte) (DataNode, error) {
 	newNode := DataNode{}
 	empty := NodeType{}
 	if *t == empty {
-		return DataNode{},
-			error(helpers.NodeError("The NodeType is blank. Must have a valid node type"))
+		return nil, error(helpers.NodeError("The NodeType is blank. Must have a valid node type"))
 	}
 	newNode.dataType = t
 	newNode.SetValue.Do(func() {
