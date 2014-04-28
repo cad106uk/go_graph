@@ -11,13 +11,15 @@ type arrayStringCount struct {
 
 // If we have no more running goroutines close down this search
 func (cc *arrayStringCount) closeChannels() {
+	if cc.edgeCount != 0 || cc.nodeCount != 0 {
+		return
+	}
+
 	closeChannels := func() {
 		close(cc.edgeStep)
 		close(cc.nodeStep)
 	}
-	if cc.edgeCount == 0 && cc.nodeCount == 0 {
-		cc.once.Do(closeChannels)
-	}
+	cc.once.Do(closeChannels)
 }
 
 func (cc *arrayStringCount) NextStep(node *NodeStep) {
