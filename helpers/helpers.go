@@ -51,12 +51,10 @@ func bufferNewIds(done <-chan struct{}) {
 	}
 }
 
-func GenIds() {
+
+func GetId() []byte {
 	genIdsOnce.Do(func() {
 		go bufferNewIds(endBuffer)
 	})
-}
-
-func GetId() []byte {
 	return <-idBuffer
 }

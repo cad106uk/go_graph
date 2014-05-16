@@ -33,7 +33,6 @@ func (dh *DataNode) GetId() string {
 }
 
 func CreateDataNode(t *NodeType, d []byte) (*DataNode, error) {
-	helpers.GenIds()
 	newData := NodeData{d}
 	newNode := DataNode{}
 	empty := NodeType{}
