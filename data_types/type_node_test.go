@@ -70,8 +70,7 @@ func TestGetNodeType(t *testing.T) {
 	}
 
 	val, err = GetNodeType("FAIL")
-	tmp := NodeType{}
-	if *val != tmp {
+	if val != nil {
 		t.Error("Didn't return empty NodeType")
 	}
 

@@ -28,8 +28,8 @@ func (cc *arrayStringCount) NextStep(node *NodeStep) {
 		cc.nodeCount--
 		return
 	}
-	currentEdges := node.Edges[0]
 
+	currentEdges := node.Edges[0]
 	for _, val := range node.Node.GetConnectTo() {
 		edgeTypeName := val.EdgeType.GetName()
 		for i := 0; i < len(currentEdges); i++ {

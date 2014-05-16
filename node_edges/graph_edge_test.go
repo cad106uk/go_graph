@@ -34,8 +34,8 @@ func TestNew(t *testing.T) {
 	toData, _ := data_types.CreateDataNode(toEdge, []byte("Your Moma"))
 	failNode := GraphNode{}
 	et, _ := CreateEdgeType("Your Moma", []data_types.NodeType{*fromEdge}, []data_types.NodeType{*toEdge})
-	fromGN := GraphNode{fromData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
-	toGN := GraphNode{toData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
+	fromGN := GraphNode{*fromData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
+	toGN := GraphNode{*toData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 
 	//No edge type called GAIL
 	_, err := NewGraphEdge("FAIL", &fromGN, &toGN)

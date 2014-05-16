@@ -1,7 +1,7 @@
 package go_graph
 
 /*
- We need to let user build er there own custom search algorithims. There are predefined algos in graph_path.go that maybe useful here. 
+ We need to let user build er there own custom search algorithims. There are predefined algos in graph_path.go that maybe useful here.
 
  These need to be stored so they can be used again. (And deleted)
 

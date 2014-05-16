@@ -50,7 +50,7 @@ func (gn *GraphNode) Init(nt *data_types.NodeType, input data_types.NodeData, fr
 
 	conTo := append(gn.connectTo, to)
 	conFrom := append(gn.connectFrom, from)
-	gn.value = dn
+	gn.value = *dn
 	gn.connectTo = conTo
 	gn.connectFrom = conFrom
 	return nil
@@ -68,12 +68,12 @@ func (gn *GraphNode) AddToEdge(to GraphEdge) error {
 	return nil
 }
 
-func NewGraphNode(nt *data_types.NodeType, input []byte) (GraphNode, error) {
+func NewGraphNode(nt *data_types.NodeType, input []byte) (*GraphNode, error) {
 	gn := GraphNode{}
 	dn, err := data_types.CreateDataNode(nt, input)
 	if err != nil {
 		return nil, err
 	}
-	gn.value = dn
-	return gn, nil
+	gn.value = *dn
+	return &gn, nil
 }

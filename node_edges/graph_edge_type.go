@@ -64,7 +64,7 @@ func GetEdgeType(name string) (*edgeType, error) {
 	return &val, nil
 }
 
-func CreateEdgeType(name string, validFrom, validTo []data_types.NodeType) (edgeType, error) {
+func CreateEdgeType(name string, validFrom, validTo []data_types.NodeType) (*edgeType, error) {
 	allEdgeTypes.Lock()
 	defer allEdgeTypes.Unlock()
 
@@ -75,5 +75,5 @@ func CreateEdgeType(name string, validFrom, validTo []data_types.NodeType) (edge
 
 	newEdge := edgeType{name, validFrom, validTo}
 	allEdgeTypes.m[name] = newEdge
-	return newEdge, nil
+	return &newEdge, nil
 }

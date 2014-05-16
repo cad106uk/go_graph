@@ -32,7 +32,7 @@ func (dh *DataNode) GetId() string {
 	return dh.id
 }
 
-func CreateDataNode(t *NodeType, d []byte) (DataNode, error) {
+func CreateDataNode(t *NodeType, d []byte) (*DataNode, error) {
 	helpers.GenIds()
 	newData := NodeData{d}
 	newNode := DataNode{}
@@ -46,5 +46,5 @@ func CreateDataNode(t *NodeType, d []byte) (DataNode, error) {
 		newNode.id = string(helpers.GetId())
 	})
 
-	return newNode, nil
+	return &newNode, nil
 }

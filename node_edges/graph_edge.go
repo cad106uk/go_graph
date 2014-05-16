@@ -12,7 +12,7 @@ type GraphEdge struct {
 }
 
 // Create new edge. An edge is allowed to link to the same node
-func NewGraphEdge(edTy string, from, to *GraphNode) (GraphEdge, error) {
+func NewGraphEdge(edTy string, from, to *GraphNode) (*GraphEdge, error) {
 	et, err := GetEdgeType(edTy)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func NewGraphEdge(edTy string, from, to *GraphNode) (GraphEdge, error) {
 	ge.EdgeType = et
 	ge.ConnectFrom = from
 	ge.ConnectTo = to
-	return ge, nil
+	return &ge, nil
 }
 
 // To handle a set of relation eg. Famly would holed brother, sister etc
