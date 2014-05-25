@@ -51,7 +51,6 @@ func bufferNewIds(done <-chan struct{}) {
 	}
 }
 
-
 func GetId() []byte {
 	genIdsOnce.Do(func() {
 		go bufferNewIds(endBuffer)
