@@ -26,23 +26,23 @@ func generateTestNodes1() []node_edges.GraphNode {
 	node_edges.CreateEdgeType("2-5", []data_types.NodeType{*nodeType2}, []data_types.NodeType{*nodeType5})
 	node5, _ := node_edges.NewGraphNode(nodeType5, []byte("node5"))
 
-	edge1, _ := node_edges.NewGraphEdge("1-2", &node1, &node2)
-	edge2, _ := node_edges.NewGraphEdge("1-3", &node1, &node3)
-	edge3, _ := node_edges.NewGraphEdge("2-4", &node2, &node4)
-	edge4, _ := node_edges.NewGraphEdge("2-5", &node2, &node5)
+	edge1, _ := node_edges.NewGraphEdge("1-2", node1, node2)
+	edge2, _ := node_edges.NewGraphEdge("1-3", node1, node3)
+	edge3, _ := node_edges.NewGraphEdge("2-4", node2, node4)
+	edge4, _ := node_edges.NewGraphEdge("2-5", node2, node5)
 
-	node1.AddToEdge(edge1)
-	node1.AddToEdge(edge2)
+	node1.AddToEdge(*edge1)
+	node1.AddToEdge(*edge2)
 
-	node2.AddFromEdge(edge1)
-	node2.AddToEdge(edge3)
-	node2.AddToEdge(edge4)
+	node2.AddFromEdge(*edge1)
+	node2.AddToEdge(*edge3)
+	node2.AddToEdge(*edge4)
 
-	node3.AddFromEdge(edge2)
-	node4.AddFromEdge(edge3)
-	node5.AddFromEdge(edge4)
+	node3.AddFromEdge(*edge2)
+	node4.AddFromEdge(*edge3)
+	node5.AddFromEdge(*edge4)
 
-	return []node_edges.GraphNode{node1, node2, node3, node4, node5}
+	return []node_edges.GraphNode{*node1, *node2, *node3, *node4, *node5}
 }
 
 func nodeValue(local_node node_edges.GraphNode) []byte {
@@ -126,13 +126,13 @@ func generateTestNodes2() []node_edges.GraphNode {
 	node_edges.CreateEdgeType("1-2", []data_types.NodeType{*nodeType1}, []data_types.NodeType{*nodeType2})
 	node_edges.CreateEdgeType("2-1", []data_types.NodeType{*nodeType2}, []data_types.NodeType{*nodeType1})
 
-	edge1, _ := node_edges.NewGraphEdge("1-2", &node1, &node3)
-	edge2, _ := node_edges.NewGraphEdge("2-1", &node3, &node2)
+	edge1, _ := node_edges.NewGraphEdge("1-2", node1, node3)
+	edge2, _ := node_edges.NewGraphEdge("2-1", node3, node2)
 
-	node1.AddToEdge(edge1)
-	node3.AddToEdge(edge2)
+	node1.AddToEdge(*edge1)
+	node3.AddToEdge(*edge2)
 
-	return []node_edges.GraphNode{node1}
+	return []node_edges.GraphNode{*node1}
 }
 
 func TestData(t *testing.T) {

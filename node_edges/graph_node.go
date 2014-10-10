@@ -42,28 +42,28 @@ func (gn *GraphNode) SetValue(input data_types.NodeData) error {
 	return nil
 }
 
-func (gn *GraphNode) Init(nt *data_types.NodeType, input data_types.NodeData, from, to GraphEdge) error {
+func (gn *GraphNode) Init(nt *data_types.NodeType, input data_types.NodeData, from, to *GraphEdge) error {
 	dn, err := data_types.CreateDataNode(nt, input.GetData())
 	if err != nil {
 		return err
 	}
 
-	conTo := append(gn.connectTo, to)
-	conFrom := append(gn.connectFrom, from)
+	conTo := append(gn.connectTo, *to)
+	conFrom := append(gn.connectFrom, *from)
 	gn.value = *dn
 	gn.connectTo = conTo
 	gn.connectFrom = conFrom
 	return nil
 }
 
-func (gn *GraphNode) AddFromEdge(from GraphEdge) error {
-	new_edge := append(gn.connectFrom, from)
+func (gn *GraphNode) AddFromEdge(from *GraphEdge) error {
+	new_edge := append(gn.connectFrom, *from)
 	gn.connectFrom = new_edge
 	return nil
 }
 
-func (gn *GraphNode) AddToEdge(to GraphEdge) error {
-	new_edge := append(gn.connectTo, to)
+func (gn *GraphNode) AddToEdge(to *GraphEdge) error {
+	new_edge := append(gn.connectTo, *to)
 	gn.connectTo = new_edge
 	return nil
 }

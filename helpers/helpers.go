@@ -28,7 +28,7 @@ func genRandNum() []byte {
 	_, err := io.ReadFull(rand.Reader, randStore)
 	if err != nil {
 		// It is either this panic. Though panic might be better
-		genRandNum()
+		return genRandNum()
 	}
 	return randStore
 }
