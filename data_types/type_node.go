@@ -51,7 +51,7 @@ func GetOrCreateNodeType(name, desc string) (*NodeType, error) {
 
 	err = CreateNewNodeType(name, desc)
 	if err == nil {
-		return GetNodeType(name)
+		return GetNodeType(name), nil
 	}
 
 	return nil, err
