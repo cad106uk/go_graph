@@ -1,7 +1,6 @@
-package data_types
+package go_graph
 
 import (
-	"github.com/cad106uk/go_graph/helpers"
 	"sync"
 )
 
@@ -37,12 +36,12 @@ func CreateDataNode(t *NodeType, d []byte) (*DataNode, error) {
 	newNode := DataNode{}
 	empty := NodeType{}
 	if *t == empty {
-		return nil, error(helpers.NodeError("The NodeType is blank. Must have a valid node type"))
+		return nil, error(NodeError("The NodeType is blank. Must have a valid node type"))
 	}
 	newNode.dataType = t
 	newNode.SetValue.Do(func() {
 		newNode.NodeData = newData
-		newNode.id = string(helpers.GetId())
+		newNode.id = string(GetId())
 	})
 
 	return &newNode, nil

@@ -1,7 +1,6 @@
 package go_graph
 
 import (
-	"github.com/cad106uk/go_graph/node_edges"
 	"sync"
 )
 
@@ -16,12 +15,12 @@ import (
 */
 
 type NodeStep struct {
-	Node  node_edges.GraphNode
+	Node  GraphNode
 	Edges [][]string
 }
 
 type EdgeStep struct {
-	Edge  node_edges.GraphEdge
+	Edge  GraphEdge
 	Edges [][]string
 }
 
@@ -44,6 +43,6 @@ type concurrentCount struct {
 	nodeCount int64
 	edgeStep  chan EdgeStep
 	nodeStep  chan NodeStep
-	output    chan node_edges.GraphNode
+	output    chan GraphNode
 	once      sync.Once
 }

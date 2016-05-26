@@ -1,7 +1,7 @@
 // All the helper functions that don't direct functionality for the
 // Graph, but help that functionality along. (Didn't want to call this
 // file lib because that can get really confusing)
-package helpers
+package go_graph
 
 import (
 	"crypto/rand"

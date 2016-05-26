@@ -12,10 +12,9 @@
 
  Also the GraphNode and GraphEdge are public and for the rest of the system to use. The dataNode and nodeType are private internal structs
 */
-package node_edges
+package go_graph
 
 import (
-	"github.com/cad106uk/go_graph/data_types"
 	"testing"
 )
 
@@ -28,12 +27,12 @@ func TestNew(t *testing.T) {
 	// Clean the data
 	allEdgeTypes.m = make(map[string]edgeType)
 
-	fromEdge, _ := data_types.GetOrCreateNodeType("ValidFrom", "Moma")
-	fromData, _ := data_types.CreateDataNode(fromEdge, []byte("Your Moma"))
-	toEdge, _ := data_types.GetOrCreateNodeType("ValidTo", "Moma")
-	toData, _ := data_types.CreateDataNode(toEdge, []byte("Your Moma"))
+	fromEdge, _ := GetOrCreateNodeType("ValidFrom", "Moma")
+	fromData, _ := CreateDataNode(fromEdge, []byte("Your Moma"))
+	toEdge, _ := GetOrCreateNodeType("ValidTo", "Moma")
+	toData, _ := CreateDataNode(toEdge, []byte("Your Moma"))
 	failNode := GraphNode{}
-	et, _ := CreateEdgeType("Your Moma", []data_types.NodeType{*fromEdge}, []data_types.NodeType{*toEdge})
+	et, _ := CreateEdgeType("Your Moma", []NodeType{*fromEdge}, []NodeType{*toEdge})
 	fromGN := GraphNode{*fromData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 	toGN := GraphNode{*toData, make([]GraphEdge, 0), make([]GraphEdge, 0)}
 

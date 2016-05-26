@@ -11,12 +11,10 @@ say whether a connection can be made. (So a valid connection can only be
 created after 2 GraphNodes have agreed the edge can be made).
 */
 
-package node_edges
-
-import "github.com/cad106uk/go_graph/data_types"
+package go_graph
 
 type GraphNode struct {
-	value       data_types.DataNode
+	value       DataNode
 	connectFrom []GraphEdge // The GraphEdges that use this node as a starting point
 	connectTo   []GraphEdge // The GraphEdges the use this node as an end point
 }
@@ -30,20 +28,20 @@ func (gn *GraphNode) GetConnectTo() []GraphEdge {
 }
 
 // returns the value that the GraphNode has
-func (gn *GraphNode) Value() data_types.NodeData {
+func (gn *GraphNode) Value() NodeData {
 	return gn.value.NodeData
 }
 
 // Set the value this GraphNode stores. Can be called many times but onyl sets a value the first time it has been called.
-func (gn *GraphNode) SetValue(input data_types.NodeData) error {
+func (gn *GraphNode) SetValue(input NodeData) error {
 	gn.value.SetValue.Do(func() {
 		gn.value.NodeData = input
 	})
 	return nil
 }
 
-func (gn *GraphNode) Init(nt *data_types.NodeType, input data_types.NodeData, from, to *GraphEdge) error {
-	dn, err := data_types.CreateDataNode(nt, input.GetData())
+func (gn *GraphNode) Init(nt *NodeType, input NodeData, from, to *GraphEdge) error {
+	dn, err := CreateDataNode(nt, input.GetData())
 	if err != nil {
 		return err
 	}
@@ -68,9 +66,9 @@ func (gn *GraphNode) AddToEdge(to *GraphEdge) error {
 	return nil
 }
 
-func NewGraphNode(nt *data_types.NodeType, input []byte) (*GraphNode, error) {
+func NewGraphNode(nt *NodeType, input []byte) (*GraphNode, error) {
 	gn := GraphNode{}
-	dn, err := data_types.CreateDataNode(nt, input)
+	dn, err := CreateDataNode(nt, input)
 	if err != nil {
 		return nil, err
 	}

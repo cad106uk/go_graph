@@ -1,7 +1,6 @@
-package data_types
+package go_graph
 
 import (
-	"github.com/cad106uk/go_graph/helpers"
 	"sync"
 )
 
@@ -25,7 +24,7 @@ func CreateNewNodeType(name, desc string) error {
 
 	_, present := allNodeTypes.m[name]
 	if present {
-		return error(helpers.NodeError("A NodeType with this name has already been created"))
+		return error(NodeError("A NodeType with this name has already been created"))
 	}
 
 	allNodeTypes.m[name] = NodeType{name, desc}
@@ -38,7 +37,7 @@ func GetNodeType(name string) (*NodeType, error) {
 
 	val, present := allNodeTypes.m[name]
 	if !present {
-		return nil, error(helpers.NodeError("No NodeType with this name exists"))
+		return nil, error(NodeError("No NodeType with this name exists"))
 	}
 	return &val, nil
 }

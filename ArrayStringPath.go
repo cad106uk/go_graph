@@ -1,7 +1,7 @@
 package go_graph
 
 import (
-	"github.com/cad106uk/go_graph/node_edges"
+
 	"sync"
 )
 
@@ -84,7 +84,7 @@ func (cc *arrayStringCount) ProcessNodes() {
 }
 
 // A helper function to start walking a graph. Output is the interfaces concern. Always start on a GraphNode
-func StartArrayStringWalkingPath(edges [][]string, output chan node_edges.GraphNode, start *node_edges.GraphNode) {
+func StartArrayStringWalkingPath(edges [][]string, output chan GraphNode, start *GraphNode) {
 	edgeStep := make(chan EdgeStep, 10)
 	nodeStep := make(chan NodeStep, 10)
 	var once sync.Once

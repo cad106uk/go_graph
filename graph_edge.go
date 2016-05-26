@@ -1,8 +1,7 @@
-package node_edges
+package go_graph
+
 
 import (
-	"github.com/cad106uk/go_graph/data_types"
-	"github.com/cad106uk/go_graph/helpers"
 )
 
 type GraphEdge struct {
@@ -19,26 +18,26 @@ func NewGraphEdge(edTy string, from, to *GraphNode) (*GraphEdge, error) {
 	}
 
 	if from.value.GetId() == "" {
-		return nil, error(helpers.NodeError("The from dataNode has not been initialised"))
+		return nil, error(NodeError("The from dataNode has not been initialised"))
 	}
 
 	match := et.ValidFromNode(*from)
 	if !match {
-		return nil, error(helpers.NodeError("The from dataNode is invalid for this edge type"))
+		return nil, error(NodeError("The from dataNode is invalid for this edge type"))
 	}
 
-	tmp := data_types.DataNode{}
+	tmp := DataNode{}
 	if to.value.GetId() == tmp.GetId() {
 		to = from
 	}
 
 	if to.value.GetId() == "" {
-		return nil, error(helpers.NodeError("The to dataNode hsa not been initialised"))
+		return nil, error(NodeError("The to dataNode hsa not been initialised"))
 	}
 
 	match = et.ValidToNode(*to)
 	if !match {
-		return nil, error(helpers.NodeError("The to dataNode is invalid for this edge type"))
+		return nil, error(NodeError("The to dataNode is invalid for this edge type"))
 	}
 
 	ge := GraphEdge{}
@@ -54,7 +53,7 @@ type RelationSet struct {
 	name      string
 }
 
-func nodeInList(list []data_types.NodeType, ele *data_types.NodeType) bool {
+func nodeInList(list []NodeType, ele *NodeType) bool {
 	for _, val := range list {
 		if &val == ele {
 			return true
@@ -63,7 +62,7 @@ func nodeInList(list []data_types.NodeType, ele *data_types.NodeType) bool {
 	return false
 }
 
-func handleRelSetValid(validList, exploreList []data_types.NodeType) (bool, *data_types.NodeType) {
+func handleRelSetValid(validList, exploreList []NodeType) (bool, *NodeType) {
 	for _, nt := range validList {
 		if nodeInList(exploreList, &nt) {
 			return true, &nt
@@ -72,22 +71,22 @@ func handleRelSetValid(validList, exploreList []data_types.NodeType) (bool, *dat
 	return false, nil
 }
 
-func (rs *RelationSet) ValidFromNode(et *edgeType) (*data_types.NodeType, error) {
+func (rs *RelationSet) ValidFromNode(et *edgeType) (*NodeType, error) {
 	for _, edge := range rs.edgeTypes {
 		success, output := handleRelSetValid(edge.validFromNodes, et.validFromNodes)
 		if success {
 			return output, nil
 		}
 	}
-	return nil, error(helpers.NodeError("This edge type is not valid for this RelationSet"))
+	return nil, error(NodeError("This edge type is not valid for this RelationSet"))
 }
 
-func (rs *RelationSet) ValidToNode(et *edgeType) (*data_types.NodeType, error) {
+func (rs *RelationSet) ValidToNode(et *edgeType) (*NodeType, error) {
 	for _, edge := range rs.edgeTypes {
 		success, output := handleRelSetValid(edge.validToNodes, et.validToNodes)
 		if success {
 			return output, nil
 		}
 	}
-	return nil, error(helpers.NodeError("This edge type is not valid for this RelationSet"))
+	return nil, error(NodeError("This edge type is not valid for this RelationSet"))
 }
