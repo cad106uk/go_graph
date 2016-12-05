@@ -20,6 +20,7 @@ func (rsc *regexStringCount) closeChannels() {
 }
 
 func (rsc *regexStringCount) NextStep(node *NodeStep) {
+	// One forward step in the graph
 	defer rsc.closeChannels()
 	if len(node.Edges) == 0 {
 		rsc.nodeCount--
